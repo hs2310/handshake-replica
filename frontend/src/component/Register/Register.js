@@ -96,6 +96,7 @@ class Register extends Component {
         }
         return (
             <div style={{ marginTop: "10%", marginRight: "40%", marginLeft: "40%" }}>
+                <h1>Sign Up</h1>
                 <form onSubmit={this.handleSubmit}>
                     <div className="form-group">
                         <input
@@ -127,7 +128,7 @@ class Register extends Component {
                             required
                         />
                     </div>
-                    ]<input 
+                    <input 
                         type="radio"
                         name="choice" 
                         value= "student"  

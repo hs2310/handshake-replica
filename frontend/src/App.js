@@ -5,6 +5,10 @@ import {BrowserRouter} from 'react-router-dom';
 
 //App Component
 class App extends Component {
+  // constructor(props) {
+  //   super(props);
+  //   this.store = this.props.store;
+  // }
   render() {
     return (
       //Use Browser Router to route to different pages

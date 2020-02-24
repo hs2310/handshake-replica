@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 //import Register from './Register/Register';
 import axios from 'axios';
 import cookie from 'react-cookies';
-import { Redirect } from 'react-router';
+import { Redirect , Link } from 'react-router-dom';
 
 //Define a Login Component
 class Login extends Component {
@@ -67,6 +67,10 @@ class Login extends Component {
                         error: '',
                         authFlag: true
                     })
+                    if (this.state.company === false)
+                        localStorage.setItem('type', 'students');
+                    else if (this.state.company === true)
+                        localStorage.setItem('type', 'college');
                 }
             }).catch(e => {
                 console.log(e);
@@ -78,13 +82,14 @@ class Login extends Component {
     }
     render() {
         if (cookie.load("cookie")) {
-            return <Redirect to="/" />
+            return <Redirect to="/home" />
         }
         if (this.state.show === false) {
             return (
+
                 <div style={{ marginTop: "5%", marginLeft: "20%", marginRight: "20%" }}>
                     <div style={{ textAlign: "right", marginTop: "5%" }}>
-                        No account? <a href="/register">Sign Up Here</a>
+                        No account? <Link to="/register">Sign Up Here</Link>
                     </div>
                     <form onSubmit={this.collegeHandler}>
                         <h4>Sign in</h4>
@@ -106,7 +111,7 @@ class Login extends Component {
                         </div>
                         <h6>Employers & Career Centers</h6>
                         Please sign in with your email on next page.<br />
-                        <button class="btn btn-primary">Next</button>
+                        <button className="btn btn-primary">Next</button>
                     </form>
                 </div>
             );
@@ -114,6 +119,7 @@ class Login extends Component {
         if (this.state.show === true) {
             return (
                 <div style={{ marginTop: "10%", marginRight: "40%", marginLeft: "40%" }}>
+                    <h1>Sign In</h1>
                     <form onSubmit={this.handleSubmit}>
                         <div className="form-group">
                             <input

@@ -34,20 +34,19 @@ app.use(function (req, res, next) {
     next();
 });
 
-// get the client
+
 const mysql = require('mysql2');
 
-// create the connection to database
-const connection = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    database: 'handshake'
-});
+// get the promise implementation, we will use bluebird
+//const bluebird = require('bluebird');
 
-
+const connection = mysql.createConnection({ host: 'localhost', user: 'root', database: 'handshake' });
+// var student  = require("./routes/student");
+// app.use('/',student)
 let isLoggedIn = () => {
     return true;
 }
+
 app.post('/student-signup', function (req, res) {
 
     var name = req.body.name;
@@ -106,13 +105,11 @@ app.post('/login', function (req, res) {
         if (results.length > 0) {
             // if (user.username === req.body.username && user.password === req.body.password) {
             res.cookie('cookie', req.session.id, { maxAge: 900000, httpOnly: false, path: '/' });
-            if (table === "students")
-            {
+            if (table === "students") {
                 req.session.user = results[0].sid;
                 req.session.type = "student";
             }
-            else
-            {
+            else {
                 req.session.user = results[0].cid;
                 req.session.type = "company";
             }
@@ -129,14 +126,27 @@ app.post('/login', function (req, res) {
 
 });
 app.post('/student', (req, res) => {
-    connection.query(
-        'SELECT * FROM `students` WHERE sid = req.body.sid',
-        function (err, results, fields) {
-            res.send(results); // results contains rows returned by server
-            //console.log(fields); // fields contains extra meta data about results, if available
-        }
-    );
+    async function getStudent() {
+        const mysql = require('mysql2/promise');
+        const conn = await mysql.createConnection({ host: 'localhost', user: 'root', database: 'handshake' });
+        const [rows, fields] = await conn.execute('SELECT * FROM `students` WHERE sid = "1"');
+        const [r1, f1] = await conn.execute('SELECT `skills`.`name` FROM `skills` INNER JOIN `skillset` ON (skills.skid = skillset.skid AND skillset.sid = "1" )');
+        const [r2, f2] = await conn.execute('SELECT * FROM `education` WHERE sid = "1"');
+        const [r3, f3] = await conn.execute('SELECT * FROM `experience` WHERE sid = "1"');
+        rows.push(r1[0]);
+        rows.push(r2[0]);
+        rows.push(r3[0]);
+        await conn.end();
+        return rows;
+    }
+
+    data = getStudent()
+    data.then((r) => {
+        res.send(r);
+        // console.log(r);
+    })   
 })
+    
 //start your server on port 3001
 app.listen(3001);
 console.log("Server Listening on port 3001"); 
