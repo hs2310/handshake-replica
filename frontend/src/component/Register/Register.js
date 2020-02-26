@@ -86,8 +86,7 @@ class Register extends Component {
                     this.setState({
                         error: <div className="alert alert-danger" style={{ marginTop: '5%' }}>User Already Exists!!</div>,
                     })
-                }
-
+                }   
             });
     }
     render() {
@@ -151,9 +150,9 @@ class Register extends Component {
                     <div className="form-group" style={{ display : this.state.hide}}>
                             <select name="college" onChange={this.selecthandleChange} className="form-control">
                                 <option value=""></option>
-                                <option value="sjsu">San Jose State University</option>
-                                <option value="scu">Santa Clara University</option>
-                                <option value="ucb">University of California Berkley</option>
+                                <option value="San Jose State University">San Jose State University</option>
+                                <option value="Santa Clara University">Santa Clara University</option>
+                                <option value="University of California Berkley">University of California Berkley</option>
                             </select>
                     </div>
                     <div className="form-group">
