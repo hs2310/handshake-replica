@@ -144,7 +144,53 @@ app.post('/studentSkills', (req, res) => {
     async function getSkills() {
         const mysql = require('mysql2/promise');
         const conn = await mysql.createConnection({ host: 'localhost', user: 'root', database: 'handshake' });
-        const [rows, f1] = await conn.execute('SELECT `skills`.`name` FROM `skills` INNER JOIN `skillset` ON (skills.skid = skillset.skid AND skillset.sid = "1" )');
+        const [rows, f1] = await conn.execute('SELECT `skills`.*,`skillset`.* FROM `skills` INNER JOIN `skillset` ON (skills.skid = skillset.skid AND skillset.sid = "1" )');
+        await conn.end();
+        return rows;
+    }
+
+    data = getSkills()
+    data.then((r) => {
+        res.send(r);
+        // console.log(r);
+    })
+})
+app.post('/getSkills', (req, res) => {
+    async function getSkills() {
+        const mysql = require('mysql2/promise');
+        const conn = await mysql.createConnection({ host: 'localhost', user: 'root', database: 'handshake' });
+        const [rows, f1] = await conn.execute('SELECT * FROM `skills` ');
+        await conn.end();
+        return rows;
+    }
+
+    data = getSkills()
+    data.then((r) => {
+        res.send(r);
+        // console.log(r);
+    })
+})
+app.post('/DeleteSkill', (req, res) => {
+    async function getSkills() {
+        const mysql = require('mysql2/promise');
+        const conn = await mysql.createConnection({ host: 'localhost', user: 'root', database: 'handshake' });
+        const [error, results] = await conn.query('DELETE FROM `skillset`  WHERE id = ?;' , [Number(req.body.id)]);
+        await conn.end();
+        return rows;
+    }
+
+    data = getSkills()
+    data.then((r) => {
+        res.send(r);
+        // console.log(r);
+    })
+})
+
+app.post('/UpdateSkill', (req, res) => {
+    async function getSkills() {
+        const mysql = require('mysql2/promise');
+        const conn = await mysql.createConnection({ host: 'localhost', user: 'root', database: 'handshake' });
+        const [error, results] = await conn.query('INSERT INTO `skillset` (sid,skid) VALUES (?,?)', [req.body.sid, req.body.selectSkill]);
         await conn.end();
         return rows;
     }
@@ -321,6 +367,78 @@ app.post('/deleteEducation', (req,res) =>{
     }
 
     data = deleteEducation()
+    data.then((r) => {
+        res.send(r);
+        // console.log(r);
+    })
+})
+app.post('/UpdateInfo', (req,res) =>{
+    console.log(req.body);
+    async function updateInfo() {
+        const mysql = require('mysql2/promise');
+        const conn = await mysql.createConnection({ host: 'localhost', user: 'root', database: 'handshake' });
+        const [error, results] = await conn.query('UPDATE `students` SET name = ? , college = ?, dob = ? WHERE sid = ?;' , [req.body.name, req.body.college, req.body.dob,Number(req.body.sid)]);
+        
+        await conn.end();
+        // return Object.assign({}, rows);
+        if (error){ 
+            return res.send(error)
+        }
+        else {
+            // console.log(results)
+            return "Updated";
+        }
+    }
+
+    data = updateInfo()
+    data.then((r) => {
+        res.send(r);
+        // console.log(r);
+    })
+})
+app.post('/UpdateContactInfo', (req,res) =>{
+    console.log(req.body);
+    async function updateInfo() {
+        const mysql = require('mysql2/promise');
+        const conn = await mysql.createConnection({ host: 'localhost', user: 'root', database: 'handshake' });
+        const [error, results] = await conn.execute('UPDATE `students` SET mob = ? , email = ? WHERE sid = ?;' , [req.body.mob, req.body.email,Number(req.body.sid)]);
+        
+        await conn.end();
+        // return Object.assign({}, rows);
+        if (error){ 
+            return res.send(error)
+        }
+        else {
+            // console.log(results)
+            return "Updated";
+        }
+    }
+
+    data = updateInfo()
+    data.then((r) => {
+        res.send(r);
+        // console.log(r);
+    })
+})
+app.post('/UpdateJourney', (req,res) =>{
+    console.log(req.body);
+    async function updateInfo() {
+        const mysql = require('mysql2/promise');
+        const conn = await mysql.createConnection({ host: 'localhost', user: 'root', database: 'handshake' });
+        const [error, results] = await conn.query('UPDATE `students` SET objective = ? WHERE sid = ?;' , [req.body.objective, Number(req.body.sid)]);
+        
+        await conn.end();
+        // return Object.assign({}, rows);
+        if (error){ 
+            return res.send(error)
+        }
+        else {
+            // console.log(results)
+            return "Updated";
+        }
+    }
+
+    data = updateInfo()
     data.then((r) => {
         res.send(r);
         // console.log(r);

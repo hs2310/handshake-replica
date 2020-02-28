@@ -6,11 +6,15 @@ import { Redirect } from 'react-router';
 import { Container, Row, Col } from 'react-bootstrap';
 import Experience from './experience/experience';
 import Education from './Education/Education';
+import GeneralInfo from './GeneralInfo/GeneralInfo';
+import ContactInfo from './ContactInfo/ContactInfo'
+import MyJourney from './MyJourney/MyJourney';
+import SkillSet from './SkillSet/SkillSet';
 class Profile extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      data: '',
+      data: {},
       skills: '',
       education: [],
       experience: [],
@@ -21,9 +25,7 @@ class Profile extends React.Component {
       update_experience: false,
       dob: ''
     };
-    this.generalInfoHandler = this.generalInfoHandler.bind(this);
     this.myJourneyHandler = this.myJourneyHandler.bind(this);
-    this.contactInfoHandler = this.contactInfoHandler.bind(this);
   }
   update= () =>{
     let data = {
@@ -33,12 +35,7 @@ class Profile extends React.Component {
       this.setState({
         data: res.data[0]
       });
-      let dob = this.state.data.dob;
-      dob = dob.split('-')
-      dob = dob[1] + '-' + dob[2].slice(0, 2) + '-' + dob[0]
-      this.setState({
-        dob: dob
-      })
+      console.log(this.state.data)
       
     }).catch(e => console.log(e));
     axios.post("http://localhost:3001/studentSkills", data).then(res => {
@@ -58,17 +55,7 @@ class Profile extends React.Component {
       });      
     }).catch(e => console.log(e));
   }
-  generalInfoHandler = () => {
-    if (this.state.update_general_info === true)
-      this.setState({
-        update_general_info: false
-      });
-    else {
-      this.setState({
-        update_general_info: true
-      });
-    }
-  }
+ 
   myJourneyHandler = () => {
     if (this.state.update_my_Journey === true)
       this.setState({
@@ -81,84 +68,12 @@ class Profile extends React.Component {
     }
   }
   
-  contactInfoHandler = () =>{
-    if (this.state.update_contact === true)
-      this.setState({
-        update_contact: false
-      });
-    else {
-      this.setState({
-        update_contact: true
-      });
-    } 
-  }
  
   componentDidMount() {
-    this.update();
+     this.update();
   }
   render() {
     let style_box = { boxShadow: "1px 3px 5px grey", padding: "2%" };
-    let generalInfo =null;
-    let myJourney = null;
-    let contact = null;
-    
-
-    if (this.state.update_general_info === true) {
-      generalInfo = <div>
-        <h4>Update General Info</h4>
-        <form>
-          <div className="form-group">
-            <input type="text" name="name" placeholder="Enter your Name" className="form-control" />
-          </div>
-          <div className="form-group">
-            <select name="college" onChange={this.selecthandleChange} className="form-control">
-              <option value=""></option>
-              <option value="San Jose State University">San Jose State University</option>
-              <option value="Santa Clara University">Santa Clara University</option>
-              <option value="University of California Berkley">University of California Berkley</option>
-            </select>
-          </div>
-          <div className="form-group">
-            <input type="date" name="date" placeholder="Select Date" className="form-control" />
-          </div>
-          <button type = "button" className="btn btn-primary">Update</button>  
-        </form>
-      </div>
-    }
-    else {
-      generalInfo = <div>{this.state.data.profile_pic}<h4>{this.state.data.name}</h4>{this.state.data.college}<br />{this.state.dob}</div>;
-    }
-    if (this.state.update_my_Journey === true) {
-      myJourney = <div>
-        <h4>Update My Journey</h4> 
-        <form>
-          <div className="form-group">
-            <textarea name="journey" placeholder="Enter your Journey" className="form-control"></textarea>
-          </div>
-          <button type = "button" className="btn btn-primary">Update</button>
-        </form>
-      </div>
-    }else{
-      myJourney = <div><h4>My Journey</h4> {this.state.data.objective}</div>
-    }
-    
-    if(this.state.update_contact === true){
-      contact = <div>
-        <h4>Update Contact Information</h4>
-        <form>
-          <div className="form-group">
-            <input type="mob" name="mob" placeholder="Enter your phone number" className="form-control"/>
-          </div>
-          <div className="form-group">
-            <input type="email" name="email" placeholder="Enter your email" className="form-control"/>
-          </div>
-          <button type = "button" className="btn btn-primary">Update</button>
-        </form>
-      </div>
-    }
-    else{
-      contact = <div> <h4>Contact Information</h4> {this.state.data.mob}<br/> {this.state.data.email}</div>
-    }
     
     if (!cookie.load('cookie')) {
       return <Redirect to="/" />
@@ -169,26 +84,23 @@ class Profile extends React.Component {
         <Container style={{ marginTop: "5%" }}>
           <Row>
             <Col sm={4} style={style_box}>
-              <button onClick={this.generalInfoHandler} className="btn btn-primary" style={{ float: "right" }} type="button">edit</button>
-              {generalInfo}
+              <GeneralInfo action = {this.update} />  
             </Col>
             <Col sm={{ span: 7, offset: 1 }} style={style_box}>
-              <button onClick={this.myJourneyHandler} className="btn btn-primary" style={{ float: "right" }} type="button">edit</button>
-              {myJourney}
+              <MyJourney action={this.update}/>
             </Col>
           </Row>
           <Row>
             <Col sm={4} style={style_box}>
-              <button onClick={this.contactInfoHandler} className="btn btn-primary" style={{ float: "right" }} type="button">edit</button>
-             {contact}
+              <ContactInfo action={this.update}/>
             </Col>
             <Col sm={{ span: 7, offset: 1 }} style={style_box}>
             <Education education  = {this.state.education} action = {this.update} />
             </Col>
           </Row>
           <Row>
-            <Col sm={4} >
-
+            <Col sm={4} style={style_box}>
+              <SkillSet action ={this.update}/>
             </Col>
             <Col sm={{ span: 7, offset: 1 }} style={style_box}>
               <Experience experience  = {this.state.experience} action = {this.update} />
