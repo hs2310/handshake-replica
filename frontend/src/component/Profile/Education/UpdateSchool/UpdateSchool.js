@@ -44,7 +44,7 @@ class UpdateSchool extends React.Component {
         data.sid = '1';
         // console.log(data);
 
-        axios.post("http://localhost:3001/updateEducation", data).then(res => console.log(res.data)).catch(e => alert(e.message))
+        axios.post("http://localhost:3001/updateEducation", data).then(res => console.log(res.data)).catch(e => console.log(e.message))
 
         this.props.action();
         this.editSchool();
@@ -54,7 +54,7 @@ class UpdateSchool extends React.Component {
         let data = {};
         data.id = this.props.item.id;
 
-        axios.post("http://localhost:3001/deleteEducation", data).then(res => console.log(res.data)).catch(e => alert(e.message))
+        axios.post("http://localhost:3001/deleteEducation", data).then(res => console.log(res.data)).catch(e => console.log(e.message))
 
         this.props.action();
         this.editSchool();
@@ -90,7 +90,7 @@ class UpdateSchool extends React.Component {
                         <input type="text" name="start" placeholder="Enter Start Date DD-MM-YYYY" className="form-control" onChange={this.educationChangeHandler} defaultValue={this.props.item.start} pattern= "^(0[1-9]|1[0-9]|2[0-9]|3[0,1])([/+-])(0[1-9]|1[0-2])([/+-])(19|20)[0-9]{2}$"/>
                     </div>
                     <div className="form-group">
-                        <input type="text" name="end" placeholder="Enter End Date DD-MM-YYYY" className="form-control" onChange={this.educationChangeHandler} defaultValue={this.props.item.date} pattern= "^(0[1-9]|1[0-9]|2[0-9]|3[0,1])([/+-])(0[1-9]|1[0-2])([/+-])(19|20)[0-9]{2}$"/>
+                        <input type="text" name="end" placeholder="Enter End Date DD-MM-YYYY" className="form-control" onChange={this.educationChangeHandler} defaultValue={this.props.item.end} pattern= "^(0[1-9]|1[0-9]|2[0-9]|3[0,1])([/+-])(0[1-9]|1[0-2])([/+-])(19|20)[0-9]{2}$"/>
                     </div>
                     <div className="form-group">
                         <input type="text" name="major" placeholder="Enter Major" className="form-control" onChange={this.educationChangeHandler} defaultValue={this.props.item.major} />

@@ -40,7 +40,7 @@ class UpdateExperience extends React.Component {
         data.sid = '1';
         // console.log(data);
         
-        axios.post("http://localhost:3001/updateExperience", data).then(res => console.log(res.data)).catch(e => alert(e.message))
+        axios.put("http://localhost:3001/updateExperience", data).then(res => console.log(res.data)).catch(e => alert(e.message))
         
         this.props.action();
         this.editJob();

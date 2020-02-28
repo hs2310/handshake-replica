@@ -47,7 +47,7 @@ class ProfilePic extends React.Component {
         data.sid = '1';
         console.log(this.state);
         axios.post("http://localhost:3001/UpdateInfo", data).then(res => alert(res.data));
-        this.props.action();
+        // this.props.action();
         this.generalInfoHandler();
     }
 

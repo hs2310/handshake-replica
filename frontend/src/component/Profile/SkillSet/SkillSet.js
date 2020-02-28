@@ -8,8 +8,8 @@ class SkillSet extends React.Component {
             update_skill: false,
             skillSet: [],
             skill: [],
-            not_skill: [],
-            selectSkill: ''
+            selectSkill: '',
+            msg:''
         }
         this.skillHandler = this.skillHandler.bind(this);
         this.educationChangeHandler = this.educationChangeHandler.bind(this);
@@ -38,6 +38,7 @@ class SkillSet extends React.Component {
         this.update()
     }
     skillHandler = () => {
+        this.setState({msg :''}) 
         if (this.state.update_skill === true)
             this.setState({
                 update_skill: false
@@ -54,37 +55,41 @@ class SkillSet extends React.Component {
         })
     }
     updateInfo = (e) => {
+
         e.preventDefault();
+        this.setState({msg :''})
         let data = this.state;
         data.sid = '1';
         let flag = 0;
         this.state.skillSet.forEach(x => {
-            console.log(x)
-            console.log(data.selectSkill)
+
             if (x.skid === Number(data.selectSkill)) {
                 flag = 1;
             }
         })
+        
         if (flag === 1)
-            alert("Skill already exists")
+            this.setState({msg :<div className="alert alert-danger">"Skill already exists"</div>})
         else {
             console.log(this.state);
-            axios.post("http://localhost:3001/UpdateSkill", data).then(res => console.log(res.data));
+            axios.post("http://localhost:3001/UpdateSkill", data).then(res => {
+                console.log(res.data)
+            });
             this.update();
-            this.props.action();
+            // this.props.action();
             this.skillHandler();
         }
     }
     deleteSkill = (id) => {
         let data = { "id": id }
-        axios.post("http://localhost:3001/DeleteSkill", data).then(res => alert(console.log.data));
+        axios.post("http://localhost:3001/DeleteSkill", data).then(res => console.log(res.data));
         this.update();
-        this.props.action();
+        // this.props.action();
         this.skillHandler();
     }
-    render() {
+    render() { 
         let skill = null;
-
+        
         if (this.state.update_skill === true) {
             skill = <div>
                 <div>{this.state.skillSet.map(item => <div key={item.id}>{item.name}<button onClick={() => { this.deleteSkill(item.id) }}>X</button></div>)}</div>
@@ -110,7 +115,7 @@ class SkillSet extends React.Component {
             <button onClick={this.skillHandler} className="btn btn-primary" style={{ float: "right" }} type="button">edit</button>
 
             <h4>Skill Set</h4>
-
+            {this.state.msg}
             {skill}
         </div>
     }

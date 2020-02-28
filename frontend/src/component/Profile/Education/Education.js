@@ -6,6 +6,7 @@ class Education extends React.Component {
         super(props);
         this.state = {
             update_education: false,
+            education:[],
             school_name:'',
             edu_level: '',
             start: '',
@@ -21,7 +22,17 @@ class Education extends React.Component {
         this.educationChangeHandler = this.educationChangeHandler.bind(this);
         this.insertEdu = this.insertEdu.bind(this);
     }
-    
+    componentDidMount(){
+      this.update();
+    }
+    update = () =>{
+      let data = {sid : 1}
+      axios.post("http://localhost:3001/studentEducation", data).then(res => {
+      this.setState({
+        education : res.data
+      });
+    }).catch(e => console.log(e));
+    }
     educationChangeHandler = (e) => {
         this.setState({
             [e.target.name]: e.target.value
@@ -33,7 +44,7 @@ class Education extends React.Component {
         data.sid = '1';
 
         axios.post("http://localhost:3001/insertEducation", data).then(res => alert(res.data));
-        this.props.action();
+        this.update();
         this.educationHandler();
     }
     educationHandler = () => {
@@ -52,7 +63,7 @@ class Education extends React.Component {
         let education = null;
         if (this.state.update_education === true) {
             education = <div>
-              {this.props.education.map(element => <UpdateSchool key={element.id} item = {element} action = {this.props.action}/>)}
+              {this.state.education.map(element => <UpdateSchool key={element.id} item = {element} action = {this.update}/>)}
               <h4>Add School</h4>
               <form onSubmit={this.insertEdu}>
                 <div className = "form-group">
@@ -92,7 +103,7 @@ class Education extends React.Component {
           }
           else{
           education = <div>
-                   {this.props.education.map((item) =>
+                   {this.state.education.map((item) =>
                       <div className="card" key={item.id} >
                           <div className="card-body">
                               <h5 className="card-title">{item.school_name}</h5>

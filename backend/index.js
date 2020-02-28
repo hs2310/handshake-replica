@@ -176,7 +176,6 @@ app.post('/DeleteSkill', (req, res) => {
         const conn = await mysql.createConnection({ host: 'localhost', user: 'root', database: 'handshake' });
         const [error, results] = await conn.query('DELETE FROM `skillset`  WHERE id = ?;' , [Number(req.body.id)]);
         await conn.end();
-        return rows;
     }
 
     data = getSkills()
@@ -253,7 +252,7 @@ app.post('/insertExperience', (req, res) => {
         // console.log(r);
     })
 })
-app.post('/updateExperience', (req,res) =>{
+app.put('/updateExperience', (req,res) =>{
     console.log(req.body);
     async function updateExperience() {
         const mysql = require('mysql2/promise');
@@ -274,7 +273,7 @@ app.post('/updateExperience', (req,res) =>{
 
     data = updateExperience()
     data.then((r) => {
-        res.send(r);
+        res.send(JSO.stringify(r.data));
         // console.log(r);
     })
 })

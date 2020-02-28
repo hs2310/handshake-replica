@@ -10,6 +10,7 @@ import GeneralInfo from './GeneralInfo/GeneralInfo';
 import ContactInfo from './ContactInfo/ContactInfo'
 import MyJourney from './MyJourney/MyJourney';
 import SkillSet from './SkillSet/SkillSet';
+import {connect} from 'react-redux';
 class Profile extends React.Component {
   constructor(props) {
     super(props)
@@ -43,17 +44,17 @@ class Profile extends React.Component {
         skills : res.data[0]
       });
     }).catch(e => console.log(e));
-    axios.post("http://localhost:3001/studentEducation", data).then(res => {
-      this.setState({
-        education : res.data
-      });
-    }).catch(e => console.log(e));
-    axios.post("http://localhost:3001/studentExperience", data).then(res => {
-    // this.state.experience.push(res.data)  
-    this.setState({
-        experience : res.data
-      });      
-    }).catch(e => console.log(e));
+    // axios.post("http://localhost:3001/studentEducation", data).then(res => {
+    //   this.setState({
+    //     education : res.data
+    //   });
+    // }).catch(e => console.log(e));
+    // axios.post("http://localhost:3001/studentExperience", data).then(res => {
+    // // this.state.experience.push(res.data)  
+    // this.setState({
+    //     experience : res.data
+    //   });      
+    // }).catch(e => console.log(e));
   }
  
   myJourneyHandler = () => {
@@ -84,10 +85,10 @@ class Profile extends React.Component {
         <Container style={{ marginTop: "5%" }}>
           <Row>
             <Col sm={4} style={style_box}>
-              <GeneralInfo action = {this.update} />  
+              <GeneralInfo  />  
             </Col>
             <Col sm={{ span: 7, offset: 1 }} style={style_box}>
-              <MyJourney action={this.update}/>
+              <MyJourney />
             </Col>
           </Row>
           <Row>
@@ -95,17 +96,16 @@ class Profile extends React.Component {
               <ContactInfo action={this.update}/>
             </Col>
             <Col sm={{ span: 7, offset: 1 }} style={style_box}>
-            <Education education  = {this.state.education} action = {this.update} />
+            <Education education  = {this.state.education}  />
             </Col>
           </Row>
           <Row>
             <Col sm={4} style={style_box}>
-              <SkillSet action ={this.update}/>
+              <SkillSet />
             </Col>
             <Col sm={{ span: 7, offset: 1 }} style={style_box}>
-              <Experience experience  = {this.state.experience} action = {this.update} />
-              
-            </Col>
+              <Experience />
+           </Col>
           </Row>
         </Container>
 
@@ -116,4 +116,12 @@ class Profile extends React.Component {
     }
   }
 }
-export default Profile;
+const mapStateToProps = state => {
+
+  return { 
+      id: state.id,
+      type: state.type
+  };
+};
+export default connect(mapStateToProps)(Profile);
+// export default Profile;

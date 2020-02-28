@@ -5,7 +5,8 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import cookie from 'react-cookies';
 import { Redirect , Link } from 'react-router-dom';
-
+import {login} from '../../js/actions/index'; 
+import {connect} from 'react-redux';
 //Define a Login Component
 class Login extends Component {
     //call the constructor method
@@ -67,10 +68,21 @@ class Login extends Component {
                         error: '',
                         authFlag: true
                     })
-                    if (this.state.company === false)
+                    
+                    let payload ={
+                        id : this.state.email,
+                        type :''
+                    }
+
+                    if (this.state.company === false){
                         localStorage.setItem('type', 'students');
-                    else if (this.state.company === true)
+                        payload.type = 'students';
+                    }
+                    else if (this.state.company === true){
                         localStorage.setItem('type', 'college');
+                        payload.type = 'college';
+                    }
+                    this.props.login(payload)
                 }
             }).catch(e => {
                 console.log(e);
@@ -152,5 +164,18 @@ class Login extends Component {
         }
     }
 }
-//Export the App component so that it can be used in index.js
-export default Login;
+const mapStateToProps = state => {
+    return { 
+        id: state.id,
+        type: state.type
+    };
+};
+
+const mapDispatchToProps = dispatch => {
+    return {
+        login: rootReducer => dispatch(login(rootReducer))
+    };
+}
+export default connect(mapStateToProps, mapDispatchToProps)(Login);
+
+

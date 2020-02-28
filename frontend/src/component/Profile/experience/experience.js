@@ -6,6 +6,7 @@ class Experience extends React.Component {
         super(props);
         this.state = {
             update_experience: false,
+            experience : [],
             job_title: '',
             employer: '',
             start: '',
@@ -17,9 +18,22 @@ class Experience extends React.Component {
         this.experienceHandler = this.experienceHandler.bind(this);
         this.experienceChangeHandler = this.experienceChangeHandler.bind(this);
         this.insertExp = this.insertExp.bind(this);
-
     }
-    
+    componentDidMount(){
+        this.update()
+    }
+    update = () => {
+        let data ={
+            sid : '1'
+        }
+        axios.post("http://localhost:3001/studentExperience", data).then(res => {
+    // this.state.experience.push(res.data)  
+         this.setState({
+        experience : res.data
+      });      
+      console.log(this.state.experience)
+    }).catch(e => console.log(e));
+    }
     experienceChangeHandler = (e) => {
         this.setState({
             [e.target.name]: e.target.value
@@ -31,7 +45,7 @@ class Experience extends React.Component {
         data.sid = '1';
 
         axios.post("http://localhost:3001/insertExperience", data).then(res => alert(res.data));
-        this.props.action();
+        this.update();
         this.experienceHandler();
     }
     experienceHandler = () => {
@@ -50,7 +64,7 @@ class Experience extends React.Component {
         let experience = null;
         if (this.state.update_experience === true) {
             experience = <div>
-                {this.props.experience.map(element => <UpdateExperience key={element.id} item = {element} action = {this.props.action}/>)}
+                {this.state.experience.map(element => <UpdateExperience key={element.id} item = {element} action = {this.update}/>)}
                 <form onSubmit={this.insertExp}>
                     <div className="form-group">
                         <input type="text" name="job_title" placeholder="Enter Job Title " className="form-control" onChange={this.experienceChangeHandler} />
@@ -78,7 +92,7 @@ class Experience extends React.Component {
             </div >
         } else {
             experience = <div>
-                {this.props.experience.map((item) =>
+                {this.state.experience.map((item) =>
                     <div className="card" key={item.id} >
                         <div className="card-body">
                             <h5 className="card-title">{item.job_title}</h5>

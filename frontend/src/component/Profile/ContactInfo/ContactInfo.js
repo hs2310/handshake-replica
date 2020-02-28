@@ -49,7 +49,7 @@ class ContactInfo extends React.Component {
         data.sid = '1';
         console.log(this.state);
         axios.post("http://localhost:3001/UpdateContactInfo", data).then(res => console.log(res.data));
-        this.props.action();
+        
         this.contactInfoHandler();
     }
 

@@ -23,6 +23,7 @@ class MyJourney extends React.Component {
             console.log(this.state.data)
 
         }).catch(e => console.log(e));
+        // alert(this.props.id)
     }
     myJourneyHandler = () => {
         if (this.state.update_journey === true)
@@ -45,8 +46,8 @@ class MyJourney extends React.Component {
         let data = this.state;
         data.sid = '1';
         console.log(this.state);
-        axios.post("http://localhost:3001/UpdateJourney", data).then(res => alert(res.data));
-        this.props.action();
+        axios.post("http://localhost:3001/UpdateJourney", data).then(res => console.log(res.data));
+        // this.props.action();
         this.myJourneyHandler();
     }
 
@@ -56,12 +57,10 @@ class MyJourney extends React.Component {
             myJourney = <div>
                 <form onSubmit={this.updateInfo}>
                     <div>
-                        <form>
-                            <div className="form-group">
-                                <textarea name="objective" placeholder="Enter your Journey" className="form-control" defaultValue={this.state.objective} onChange={this.educationChangeHandler}></textarea>
-                            </div>
-                            <button type="submit" className="btn btn-primary">Update</button>
-                        </form>
+                        <div className="form-group">
+                            <textarea name="objective" placeholder="Enter your Journey" className="form-control" defaultValue={this.state.objective} onChange={this.educationChangeHandler}></textarea>
+                        </div>
+                        <button type="submit" className="btn btn-primary">Update</button>
                     </div>
                 </form>
             </div>
