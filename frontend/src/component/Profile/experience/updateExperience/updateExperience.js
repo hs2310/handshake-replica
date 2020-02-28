@@ -1,6 +1,6 @@
 import React from 'react'
 import axios from 'axios';
-
+import  {connect} from 'react-redux';
 class UpdateExperience extends React.Component {
     constructor(props) {
         super(props);
@@ -37,7 +37,7 @@ class UpdateExperience extends React.Component {
         e.preventDefault();
         let data = this.state;
         data.id = this.props.item.id;
-        data.sid = '1';
+        data.sid = this.props.id;
         // console.log(data);
         
         axios.put("http://localhost:3001/updateExperience", data).then(res => console.log(res.data)).catch(e => alert(e.message))
@@ -104,5 +104,11 @@ class UpdateExperience extends React.Component {
         </div>
     }
 }
+const mapStateToProps = state => {
 
-export default UpdateExperience;
+    return { 
+        id: state.id,
+        type: state.type
+    };
+  };
+  export default connect(mapStateToProps)(UpdateExperience);

@@ -1,6 +1,8 @@
 import React from 'react';
 import axios from 'axios';
 import UpdateSchool from './UpdateSchool/UpdateSchool';
+import {connect} from 'react-redux';
+
 class Education extends React.Component {
     constructor(props) {
         super(props);
@@ -26,7 +28,7 @@ class Education extends React.Component {
       this.update();
     }
     update = () =>{
-      let data = {sid : 1}
+      let data = {sid : this.props.id}
       axios.post("http://localhost:3001/studentEducation", data).then(res => {
       this.setState({
         education : res.data
@@ -41,7 +43,7 @@ class Education extends React.Component {
     insertEdu = (e) => {
         e.preventDefault();
         let { update, ...data } = this.state;
-        data.sid = '1';
+        data.sid = this.props.id;
 
         axios.post("http://localhost:3001/insertEducation", data).then(res => alert(res.data));
         this.update();
@@ -128,4 +130,11 @@ class Education extends React.Component {
         </div>
     }
 }
-export default Education;
+const mapStateToProps = state => {
+
+  return { 
+      id: state.id,
+      type: state.type
+  };
+};
+export default connect(mapStateToProps)(Education);

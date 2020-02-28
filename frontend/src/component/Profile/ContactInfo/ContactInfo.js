@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-
+import {connect} from 'react-redux';
 class ContactInfo extends React.Component {
     constructor(props) {
         super(props);
@@ -46,7 +46,7 @@ class ContactInfo extends React.Component {
         
         e.preventDefault();
         let data = this.state;
-        data.sid = '1';
+        data.sid = this.props.id;
         console.log(this.state);
         axios.post("http://localhost:3001/UpdateContactInfo", data).then(res => console.log(res.data));
         
@@ -80,4 +80,11 @@ class ContactInfo extends React.Component {
         </div>
     }
 }
-export default ContactInfo;
+const mapStateToProps = state => {
+
+    return { 
+        id: state.id,
+        type: state.type
+    };
+  };
+  export default connect(mapStateToProps)(ContactInfo);

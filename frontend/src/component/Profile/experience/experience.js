@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import UpdateExperience from './updateExperience/updateExperience';
+import {connect} from 'react-redux';
 class Experience extends React.Component {
     constructor(props) {
         super(props);
@@ -24,7 +25,7 @@ class Experience extends React.Component {
     }
     update = () => {
         let data ={
-            sid : '1'
+            sid : this.props.id
         }
         axios.post("http://localhost:3001/studentExperience", data).then(res => {
     // this.state.experience.push(res.data)  
@@ -42,7 +43,7 @@ class Experience extends React.Component {
     insertExp = (e) => {
         e.preventDefault();
         let { update, ...data } = this.state;
-        data.sid = '1';
+        data.sid = this.props.id
 
         axios.post("http://localhost:3001/insertExperience", data).then(res => alert(res.data));
         this.update();
@@ -115,4 +116,11 @@ class Experience extends React.Component {
         </div>
     }
 }
-export default Experience;
+const mapStateToProps = state => {
+
+    return { 
+        id: state.id,
+        type: state.type
+    };
+  };
+  export default connect(mapStateToProps)(Experience);

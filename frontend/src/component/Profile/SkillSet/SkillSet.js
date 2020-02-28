@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-
+import {connect} from 'react-redux';
 class SkillSet extends React.Component {
     constructor(props) {
         super(props);
@@ -17,7 +17,7 @@ class SkillSet extends React.Component {
     }
     update = () => {
         
-        let data = { sid: '1' }
+        let data = { sid: this.props.id }
         axios.post("http://localhost:3001/studentSkills", data).then(res => {
             this.setState({
                 skillSet: res.data,
@@ -59,7 +59,7 @@ class SkillSet extends React.Component {
         e.preventDefault();
         this.setState({msg :''})
         let data = this.state;
-        data.sid = '1';
+        data.sid = this.props.id;
         let flag = 0;
         this.state.skillSet.forEach(x => {
 
@@ -92,7 +92,7 @@ class SkillSet extends React.Component {
         
         if (this.state.update_skill === true) {
             skill = <div>
-                <div>{this.state.skillSet.map(item => <div key={item.id}>{item.name}<button onClick={() => { this.deleteSkill(item.id) }}>X</button></div>)}</div>
+                <div>{this.state.skillSet.map(item => <div key={item.id}>{item.name}<button type="button" onClick={() => { this.deleteSkill(item.id) }}>X</button></div>)}</div>
                 <form onSubmit={this.updateInfo}>
                     <div className="form-group">
                         <select name="selectSkill" className="form-control" onChange={this.educationChangeHandler}>
@@ -120,4 +120,11 @@ class SkillSet extends React.Component {
         </div>
     }
 }
-export default SkillSet;
+const mapStateToProps = state => {
+
+    return { 
+        id: state.id,
+        type: state.type
+    };
+  };
+  export default connect(mapStateToProps)(SkillSet);

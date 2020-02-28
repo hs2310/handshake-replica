@@ -11,6 +11,9 @@ import ContactInfo from './ContactInfo/ContactInfo'
 import MyJourney from './MyJourney/MyJourney';
 import SkillSet from './SkillSet/SkillSet';
 import {connect} from 'react-redux';
+import store from '../../js/store/index';
+// import {rootReducer} from '../../js/reducers/index'
+// import {store} from '../../js/store/index'
 class Profile extends React.Component {
   constructor(props) {
     super(props)
@@ -27,23 +30,26 @@ class Profile extends React.Component {
       dob: ''
     };
     this.myJourneyHandler = this.myJourneyHandler.bind(this);
+    // this.update =  this.update.bind(this);
   }
-  update= () =>{
-    let data = {
-      id: "1"
-    }
-    axios.post("http://localhost:3001/studentData", data).then(res => {
-      this.setState({
-        data: res.data[0]
-      });
-      console.log(this.state.data)
-      
-    }).catch(e => console.log(e));
-    axios.post("http://localhost:3001/studentSkills", data).then(res => {
-      this.setState({
-        skills : res.data[0]
-      });
-    }).catch(e => console.log(e));
+  update =() => {
+    // e.preventDefault();
+    console.log("ID:"+JSON.stringify(store.getState()))
+      let data = {
+        id: this.props.id
+      }
+      axios.post("http://localhost:3001/studentData", data).then(res => {
+        this.setState({
+          data: res.data[0]
+        });
+        console.log(this.state.data)
+        
+      }).catch(e => console.log(e));
+      axios.post("http://localhost:3001/studentSkills", data).then(res => {
+        this.setState({
+          skills : res.data[0]
+        });
+      }).catch(e => console.log(e));
     // axios.post("http://localhost:3001/studentEducation", data).then(res => {
     //   this.setState({
     //     education : res.data
@@ -71,7 +77,8 @@ class Profile extends React.Component {
   
  
   componentDidMount() {
-     this.update();
+     //update();
+     console.log("ID:"+JSON.stringify(store.getState()))
   }
   render() {
     let style_box = { boxShadow: "1px 3px 5px grey", padding: "2%" };
@@ -85,7 +92,7 @@ class Profile extends React.Component {
         <Container style={{ marginTop: "5%" }}>
           <Row>
             <Col sm={4} style={style_box}>
-              <GeneralInfo  />  
+              <GeneralInfo action={this.update} />  
             </Col>
             <Col sm={{ span: 7, offset: 1 }} style={style_box}>
               <MyJourney />

@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-
+import {connect} from 'react-redux';
 class MyJourney extends React.Component {
     constructor(props) {
         super(props);
@@ -14,7 +14,7 @@ class MyJourney extends React.Component {
         this.updateInfo = this.updateInfo.bind(this);
     }
     componentDidMount() {
-        let data = { id: '1' }
+        let data = { id: this.props.id }
         axios.post("http://localhost:3001/studentData", data).then(res => {
             this.setState({
                 data: res.data[0],
@@ -44,7 +44,7 @@ class MyJourney extends React.Component {
     updateInfo = (e) => {
         e.preventDefault();
         let data = this.state;
-        data.sid = '1';
+        data.sid = this.props.id;
         console.log(this.state);
         axios.post("http://localhost:3001/UpdateJourney", data).then(res => console.log(res.data));
         // this.props.action();
@@ -75,4 +75,11 @@ class MyJourney extends React.Component {
         </div>
     }
 }
-export default MyJourney;
+const mapStateToProps = state => {
+
+    return { 
+        id: state.id,
+        type: state.type
+    };
+  };
+  export default connect(mapStateToProps)(MyJourney);

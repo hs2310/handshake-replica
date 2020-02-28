@@ -70,7 +70,7 @@ class Login extends Component {
                     })
                     
                     let payload ={
-                        id : this.state.email,
+                        id : response.data,
                         type :''
                     }
 
@@ -83,6 +83,7 @@ class Login extends Component {
                         payload.type = 'college';
                     }
                     this.props.login(payload)
+                    console.log(this.props.id);
                 }
             }).catch(e => {
                 console.log(e);

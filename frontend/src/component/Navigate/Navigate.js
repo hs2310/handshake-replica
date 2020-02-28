@@ -2,6 +2,7 @@ import React from 'react'
 // import axios from 'axios';
 import cookie from 'react-cookies';
 import { Redirect } from 'react-router';
+import {Link } from 'react-router-dom';
 import * as bs from 'react-bootstrap';
 class Navigate extends React.Component {
   // constructor(props){
@@ -15,16 +16,17 @@ class Navigate extends React.Component {
     else {
       return <div>
         <bs.Navbar bg="primary" variant="dark">
-          <bs.Navbar.Brand href="/home">Handshake</bs.Navbar.Brand>
+          <Link className="navbar-brand" to="/home">Handshake</Link>
+          {/* <bs.Navbar.Brand to="/home">Handshake</bs.Navbar.Brand> */}
           <bs.Form inline>
             <bs.FormControl type="text" placeholder="Search" className="mr-sm-2" />
             <bs.Button variant="outline-light">Search</bs.Button>
           </bs.Form>
           <bs.Nav className="mr-auto">
-          <bs.Nav.Link href ="/nav">Jobs</bs.Nav.Link>
-          <bs.Nav.Link href ="/nav">Events</bs.Nav.Link>
-          <bs.Nav.Link href ="/nav">Students</bs.Nav.Link>
-          <bs.Nav.Link href="/profile">Profile</bs.Nav.Link>
+          <Link to ="/nav" className="nav-link">Jobs</Link>
+          <Link to ="/nav" className="nav-link">Events</Link>
+          <Link to ="/nav" className="nav-link">Students</Link>
+          <Link to="/profile" className="nav-link">Profile</Link>
           </bs.Nav>
          
         </bs.Navbar>

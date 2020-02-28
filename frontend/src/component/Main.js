@@ -7,7 +7,7 @@ import Login from './Login/Login';
 import Profile from './Profile/Profile'
 import Navigate from './Navigate/Navigate'
 import Register from './Register/Register';
-import {Route} from 'react-router-dom';
+import {Switch,Route} from 'react-router-dom';
 
 //Main Component
 class Main extends Component {
@@ -15,6 +15,7 @@ class Main extends Component {
     return (
         <div>
         {/*Render Different Component based on Route*/}
+        <Switch>
         <Route exact path="/" component={Login}/>
         <Route path="/home" component={Navigate}/>
         <Route path="/nav" component={Home}/>
@@ -23,7 +24,7 @@ class Main extends Component {
         {/* <Route path="/home" component={Home}/>
         <Route path="/delete" component={Delete}/>
         <Route path="/create" component={Create}/> */}
-
+        </Switch>
     </div>
     );
   }

@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-
+import {connect} from 'react-redux';
 class GeneralInfo extends React.Component {
     constructor(props) {
         super(props);
@@ -17,7 +17,7 @@ class GeneralInfo extends React.Component {
         this.updateInfo = this.updateInfo.bind(this);
     }
     componentDidMount (){
-      let data ={id : '1'}
+      let data ={id : this.props.id}
       axios.post("http://localhost:3001/studentData", data).then(res => {
       this.setState({
         data: res.data[0],
@@ -49,7 +49,7 @@ class GeneralInfo extends React.Component {
     updateInfo = (e) => {
         e.preventDefault();
         let data = this.state;
-        data.sid = '1';
+        data.sid = this.props.id;
         console.log(this.state);
         axios.post("http://localhost:3001/UpdateInfo", data).then(res => alert(res.data));
         this.props.action();
@@ -94,4 +94,11 @@ class GeneralInfo extends React.Component {
         </div>
     }
 }
-export default GeneralInfo;
+const mapStateToProps = state => {
+
+  return { 
+      id: state.id,
+      type: state.type
+  };
+};
+export default connect(mapStateToProps)(GeneralInfo);

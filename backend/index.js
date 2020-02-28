@@ -105,18 +105,27 @@ app.post('/login', function (req, res) {
         if (results.length > 0) {
             // if (user.username === req.body.username && user.password === req.body.password) {
             res.cookie('cookie', req.session.id, { maxAge: 900000, httpOnly: false, path: '/' });
+            let id = null ;
             if (table === "students") {
                 req.session.user = results[0].sid;
                 req.session.type = "student";
+                id = results[0].sid;
+                
             }
             else {
                 req.session.user = results[0].cid;
                 req.session.type = "company";
+                id = results[0].cid;
+                
             }
-            res.writeHead(200, {
-                'Content-Type': 'text/plain'
-            })
-            res.end("Successful Login");
+            console.log(results[0].sid)
+            // res.writeHead(200, {
+            //     'Content-Type': 'text/plain'
+            // })
+            res.status(200).send(String(id));
+            // res.sendStatus(200);
+            // res.setHeader({'Content-Type': 'text/plain'})
+            // res.end(results[0].sid);
         }
         else {
             res.statusCode = 401;
@@ -220,7 +229,7 @@ app.post('/studentExperience', (req, res) => {
     async function getExperience() {
         const mysql = require('mysql2/promise');
         const conn = await mysql.createConnection({ host: 'localhost', user: 'root', database: 'handshake' });
-        const [rows, f3] = await conn.execute('SELECT * FROM `experience` WHERE sid = "1"');
+        const [rows, f3] = await conn.execute('SELECT * FROM `experience` WHERE sid = '+req.body.sid);
         await conn.end();
         // return Object.assign({}, rows);
         return rows;
