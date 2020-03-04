@@ -2,11 +2,12 @@ import React, { Component } from 'react';
 //import Main from './components/Main';
 // import {BrowserRouter} from 'react-router-dom';
 //import Register from './Register/Register';
-import axios from 'axios';
+// import axios from 'axios';
 import cookie from 'react-cookies';
-import { Redirect , Link } from 'react-router-dom';
-import {login} from '../../js/actions/index'; 
-import {connect} from 'react-redux';
+import { Redirect, Link } from 'react-router-dom';
+import { login } from '../../js/actions/index';
+import { connect } from 'react-redux';
+// import {bindActionCreators} from 'redux'
 //Define a Login Component
 class Login extends Component {
     //call the constructor method
@@ -20,7 +21,8 @@ class Login extends Component {
             college: "",
             company: false,
             authFlag: false,
-            show: false
+            show: false,
+            error: ''
         }
         //Bind the handlers to this class
         this.selecthandleChange = this.selecthandleChange.bind(this);
@@ -49,7 +51,7 @@ class Login extends Component {
             show: true
         });
     }
-    handleSubmit = e => {
+    handleSubmit = async (e) => {
         e.preventDefault();
         const data = {
             email: this.state.email,
@@ -57,50 +59,66 @@ class Login extends Component {
             college: this.state.college,
             company: this.state.company
         }
-        //set the with credentials to true
-        axios.defaults.withCredentials = true;
-        //make a post request with the user data
-        axios.post('http://localhost:3001/login', data)
-            .then(response => {
-                console.log("Status Code : ", response.status);
-                if (response.status === 200) {
-                    this.setState({
-                        error: '',
-                        authFlag: true
-                    })
-                    
-                    let payload ={
-                        id : response.data,
-                        type :''
-                    }
+        // //set the with credentials to true
+        // axios.defaults.withCredentials = true;
+        // //make a post request with the user data
+        // axios.post('http://localhost:3001/login', data)
+        //     .then(response => {
+        //         console.log("Status Code : ", response.status);
+        //         if (response.status === 200) {
+        //             this.setState({
+        //                 error: '',
+        //                 authFlag: true
+        //             })
 
-                    if (this.state.company === false){
-                        localStorage.setItem('type', 'students');
-                        payload.type = 'students';
-                    }
-                    else if (this.state.company === true){
-                        localStorage.setItem('type', 'college');
-                        payload.type = 'college';
-                    }
-                    this.props.login(payload)
-                    console.log(this.props.id);
-                }
-            }).catch(e => {
-                console.log(e);
-                this.setState({
-                    error: <div className="alert alert-danger" style={{ marginTop: '5%' }}>Invalid Credentials!!</div>,
-                    authFlag: false
-                });
-            });
+        //             let payload ={
+        //                 id : response.data,
+        //                 type :''
+        //             }
+
+        //             if (this.state.company === false){
+        //                 localStorage.setItem('type', 'students');
+        //                 payload.type = 'students';
+        //             }
+        //             else if (this.state.company === true){
+        //                 localStorage.setItem('type', 'college');
+        //                 payload.type = 'company';
+        //             }
+        console.log(this.props.authFlag);
+        await this.props.login(data)
+        console.log("ACTION" + this.props.authFlag);
+
+
+        
+        // }
+        // }).catch(e => {
+        //     console.log(e);
+        //     this.setState({
+        //         error: <div className="alert alert-danger" style={{ marginTop: '5%' }}>Invalid Credentials!!</div>,
+        //         authFlag: false
+        //     });
+        // });
+    }
+    componentWillUnmount(){
+
     }
     render() {
+        if (this.props.authFlag) { return <Redirect to="/home" /> }
+        let redirectVar = null;
+        let error = '';
         if (cookie.load("cookie")) {
-            return <Redirect to="/home" />
+             redirectVar = <Redirect to="/home" />
+        }
+        if ( this.props.error === '')
+            error ='';
+        else {
+            error = <div className="alert alert-danger">Invalid Credentials</div>
         }
         if (this.state.show === false) {
             return (
 
                 <div style={{ marginTop: "5%", marginLeft: "20%", marginRight: "20%" }}>
+                    
                     <div style={{ textAlign: "right", marginTop: "5%" }}>
                         No account? <Link to="/register">Sign Up Here</Link>
                     </div>
@@ -126,6 +144,7 @@ class Login extends Component {
                         Please sign in with your email on next page.<br />
                         <button className="btn btn-primary">Next</button>
                     </form>
+                    {redirectVar}
                 </div>
             );
         }
@@ -159,16 +178,19 @@ class Login extends Component {
                             <button className="btn btn-primary form-control">Sign In</button>
                         </div>
                     </form>
-                    {this.state.error}
+                    {error}
+                    {redirectVar}
                 </div>
             );
         }
     }
 }
 const mapStateToProps = state => {
-    return { 
-        id: state.id,
-        type: state.type
+    return {
+        id: state.rootReducer.id,
+        type: state.rootReducer.type,
+        authFlag: state.rootReducer.authFlag,
+        error: state.rootReducer.error
     };
 };
 

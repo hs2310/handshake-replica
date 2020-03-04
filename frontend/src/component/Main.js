@@ -4,10 +4,14 @@ import React, { Component } from 'react';
 // import {BrowserRouter} from 'react-router-dom';
 import Home from './Home/Home';
 import Login from './Login/Login';
+import Logout from './Logout/Logout';
 import Profile from './Profile/Profile'
 import Navigate from './Navigate/Navigate'
 import Register from './Register/Register';
+import Jobs from './Jobs/Jobs'
 import {Switch,Route} from 'react-router-dom';
+import JobSearch from './JobSearch.js/JobSearch';
+import CompanyProfile from './company/CompanyProfile';
 
 //Main Component
 class Main extends Component {
@@ -19,8 +23,14 @@ class Main extends Component {
         <Route exact path="/" component={Login}/>
         <Route path="/home" component={Navigate}/>
         <Route path="/nav" component={Home}/>
+        <Route path="/jobs" component={Jobs}/>
         <Route path="/profile" component={Profile}/>
         <Route exact path="/register" component={Register}/>
+        <Route exact path="/logout" component={Logout}/>
+        <Route path="/jobSearch" component={JobSearch}/>
+        <Route path = "/displayCompany/:id" component={CompanyProfile} />
+        {/* <DisplayCompany/>
+        </Route> */}
         {/* <Route path="/home" component={Home}/>
         <Route path="/delete" component={Delete}/>
         <Route path="/create" component={Create}/> */}

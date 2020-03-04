@@ -12,6 +12,7 @@ import MyJourney from './MyJourney/MyJourney';
 import SkillSet from './SkillSet/SkillSet';
 import {connect} from 'react-redux';
 import store from '../../js/store/index';
+import {getStudentData} from '../../js/actions/profile-action'
 // import {rootReducer} from '../../js/reducers/index'
 // import {store} from '../../js/store/index'
 class Profile extends React.Component {
@@ -76,9 +77,11 @@ class Profile extends React.Component {
   }
   
  
-  componentDidMount() {
+  async componentDidMount() {
      //update();
      console.log("ID:"+JSON.stringify(store.getState()))
+     await this.props.getStudentData({id : this.props.id});
+     
   }
   render() {
     let style_box = { boxShadow: "1px 3px 5px grey", padding: "2%" };
@@ -123,12 +126,22 @@ class Profile extends React.Component {
     }
   }
 }
+
 const mapStateToProps = state => {
 
   return { 
-      id: state.id,
-      type: state.type
+      id: state.rootReducer.id,
+      data: state.profileReducer.data,
+      skills: state.profileReducer.skills,
+      skillSet:state.profileReducer.skillSet,
+      experience:state.profileReducer.experience,
+      education:state.profileReducer.education
   };
 };
-export default connect(mapStateToProps)(Profile);
+const mapDispatchToProps = dispatch => {
+  return {
+      getStudentData: (rootReducer) => dispatch(getStudentData(rootReducer))
+  };
+}
+export default connect(mapStateToProps,mapDispatchToProps)(Profile);
 // export default Profile;

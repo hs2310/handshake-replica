@@ -96,12 +96,13 @@ app.post('/login', function (req, res) {
     let table = null;
     console.log("Inside Login Post Request");
 
-    console.log("Req Body : ", req.body);
+    console.log("Req Body : ", req.body.email);
     if (req.body.company === false)
         table = "students";
     else
         table = "company";
     connection.query('SELECT * FROM `' + table + '` WHERE email = ? AND password = ?', [req.body.email, req.body.password], (error, results, fields) => {
+        console.log(results);
         if (results.length > 0) {
             // if (user.username === req.body.username && user.password === req.body.password) {
             res.cookie('cookie', req.session.id, { maxAge: 900000, httpOnly: false, path: '/' });
@@ -448,11 +449,83 @@ app.post('/UpdateJourney', (req,res) =>{
 
     data = updateInfo()
     data.then((r) => {
-        res.send(r);
+        res.send(r.data);
         // console.log(r);
     })
 })
 
+app.get('/getJobs',(req,res)=>{
+    // console.log(req.body);
+    async function updateInfo() {
+        const mysql = require('mysql2/promise');
+        const conn = await mysql.createConnection({ host: 'localhost', user: 'root', database: 'handshake' });
+        const [error, results] = await conn.execute('SELECT `job_List`.* , `company`.* FROM `job_List` INNER JOIN  `company` ON (`job_List`.cid = `company`.cid )');
+        
+        await conn.end();
+        // return Object.assign({}, rows);
+        if (error){ 
+            return error;
+        }
+        else {
+            // console.log(results)
+            return results;
+        }
+    }
+
+    data = updateInfo()
+    data.then((r) => {
+        res.send(r);
+        // console.log(r);
+    })
+})
+app.get('/getCompany',(req,res)=>{
+    async function updateInfo() {
+        const mysql = require('mysql2/promise');
+        const conn = await mysql.createConnection({ host: 'localhost', user: 'root', database: 'handshake' });
+        const [rows ,  fields] = await conn.execute('SELECT `job_List`.* , `company`.* FROM `job_List` INNER JOIN  `company` ON (`job_List`.cid = `company`.cid )');
+        
+        await conn.end();
+        // return Object.assign({}, rows);
+        // if (error){ 
+        //     return res.send(error)
+        // }
+        // else {
+        //     // console.log(results)
+        //     return "Updated";
+        // }
+        return rows;
+    }
+
+    data = updateInfo()
+    data.then((r) => {
+        res.send(r.data);
+        // console.log(r);
+    })
+})
+app.post("/getCompanyDetails", (req,res) => {
+    console.log(req.body)
+    async function updateInfo() {
+        const mysql = require('mysql2/promise');
+        const conn = await mysql.createConnection({ host: 'localhost', user: 'root', database: 'handshake' });
+        const [rows,fields] = await conn.query('SELECT * FROM `company` WHERE cid = 1');
+        
+        await conn.end();
+        // return Object.assign({}, rows);
+        // if (error){ 
+        //     return res.send(error)
+        // }
+        // else {
+            // console.log(results)
+            return rows;
+        // }
+    }
+
+    data = updateInfo()
+    data.then((r) => {
+        res.send(r);
+        console.log(r);
+    })
+})
 //start your server on port 3001
 app.listen(3001);
 console.log("Server Listening on port 3001"); 

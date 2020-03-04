@@ -1,24 +1,30 @@
-import { LOGIN } from "../constants/action-types";
+import { LOGIN , LOGOUT } from "../constants/action-types";
 
 const initialState = {
-  id : '',
-  type : ''
+  id: '',
+  type: '',
+  authFlag: false,
+  error: ''
 };
-// function rootReducer(state = initialState, action) {
-//   if (action.type === ADD_BOOK) {
-//     state.books.push(action.payload);
-//   }
-//   return state;
-// }
+
 function rootReducer(state = initialState, action) {
-    if (action.type === LOGIN) {
-      console.log("processing in reducer")
-      return Object.assign({}, state, {
-        id : action.payload.id,
-        type : action.payload.type
-      });
-    }
-    return state;
+  if (action.type === LOGIN) {
+    return Object.assign({}, state, {
+      id: action.payload.id,
+      type: action.payload.type,
+      authFlag: action.payload.authFlag,
+      error: action.payload.error
+    });
   }
-  
+  else if(action.type === LOGOUT){
+    return Object.assign({}, state, {
+      id: '',
+      type: '',
+      authFlag: '',
+      error: ''
+    });
+  }
+  return state;
+}
+
 export default rootReducer;

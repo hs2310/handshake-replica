@@ -1,5 +1,8 @@
-import { LOGIN} from "../constants/action-types";
-export function login(payload) {
-  console.log("dispatching the action")
-  return { type: LOGIN, payload };
-}
+import { LOGIN,LOGOUT } from "../constants/action-types";
+export const login = data => ({
+  type: LOGIN,
+  payload: { ...data }
+});
+export const logout = () =>({
+  type: LOGOUT
+})

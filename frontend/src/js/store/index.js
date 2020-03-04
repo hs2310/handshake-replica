@@ -1,5 +1,19 @@
-import { createStore } from "redux";
+// import { createStore } from "redux";
 import rootReducer from "../reducers/index";
+import profileReducer from "../reducers/studentProfile"
+import jobReducer from "../reducers/job";
+import { createStore,applyMiddleware,compose, combineReducers } from 'redux';
+import thunk from 'redux-thunk';
+import {AuthMiddleware} from "../middleware/index";
+import {ProfileMiddleware} from "../middleware/profileMiddleware"
+import {jobsMiddleware} from "../middleware/jobsMiddleware"
+// import rootReducer from './reducers';
+ 
+// Note: this API requires redux@>=3.1.0
+// const store = createStore(
+//   rootReducer,
+//  applyMiddleware(thunk)
+// );
 // import { login } from "../middleware/index";
 // import throttle from 'lodash.throttle';
 // import {loadState,saveState} from "../store/localStorage";
@@ -15,16 +29,18 @@ import rootReducer from "../reducers/index";
 //   });
 // },1000));
 
-const store = createStore(rootReducer,
-    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
+// const store = createStore(rootReducer,applyMiddleware(thunk));
     
-    // const storeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+   const storeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
     // const store = createStore(
     //   rootReducer,
-    //   storeEnhancers()
+      
     // );
-    
-    
-    window.store = store
+    const reducer = combineReducers({rootReducer: rootReducer, profileReducer: profileReducer, jobReducer: jobReducer})
+    const store = createStore(
+      reducer,
+      storeEnhancers(applyMiddleware(thunk,AuthMiddleware,ProfileMiddleware,jobsMiddleware))
+    );
+    // window.store = store
 
     export default store;
