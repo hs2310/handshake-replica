@@ -20,7 +20,7 @@ class Jobs extends React.Component {
             <Link className="nav-link" to="/jobSearch">Job Search</Link>
           </li>
           <li className="nav-item active">
-            <Link className="nav-link" to="#">Applications</Link>
+            <Link className="nav-link" to="/studentApplications">Applications</Link>
           </li>
         </ul>
       </nav>

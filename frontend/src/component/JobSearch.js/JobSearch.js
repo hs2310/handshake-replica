@@ -3,16 +3,18 @@ import React from 'react'
 // import cookie from 'react-cookies';
 // import { Redirect } from 'react-router';
 import { Link } from 'react-router-dom';
-import Navigate from '../Navigate/Navigate';
+// import Navigate from '../Navigate/Navigate';
 import { getJobs } from '../../js/actions/job-action';
 import { connect } from 'react-redux';
-
+import ApplicationForm from './ApplicationForm';
+import Jobs from '../Jobs/Jobs';
 class JobSearch extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
       msg: false,
-      displayJobs: {}
+      displayJobs: {},
+      apply: false
     }
   }
   async componentDidMount() {
@@ -29,6 +31,8 @@ class JobSearch extends React.Component {
     })
   }
   render() {
+    let applyForm = null;
+    
     let displayJobs = this.state.displayJobs;
     let jobList = Object.keys(this.props.jobs).map((item, i) => (
       <div className="card" key={i} onClick={() => { this.display(item) }}>
@@ -39,9 +43,12 @@ class JobSearch extends React.Component {
           <p className="card-text">{this.props.jobs[item].job_category}</p>
         </div>
       </div>
+    
     ))
+    if(this.state.apply)
+      applyForm = <ApplicationForm jobs={displayJobs}/>
     return <div>
-      <Navigate />
+      {/* <Navigate />
       <nav className="navbar navbar-expand-sm bg-light navbar-light">
         <ul className="navbar-nav">
           <li className="nav-item active">
@@ -51,7 +58,8 @@ class JobSearch extends React.Component {
             <Link className="nav-link" to="#">Applications</Link>
           </li>
         </ul>
-      </nav>
+      </nav> */}
+      <Jobs/>
       <div>
         <div className="container">
           <div className="row">
@@ -72,6 +80,8 @@ class JobSearch extends React.Component {
           <p className="card-text">{displayJobs.location}</p>
           <p className="card-text">{displayJobs.job_category}</p>
           <p className="card-text">{displayJobs.job_description}</p>
+          <button type="button" onClick={() =>{this.setState({apply : true})}} className="btn btn-primary">Apply</button>
+          {applyForm}
         </div>
       </div>
             </div>

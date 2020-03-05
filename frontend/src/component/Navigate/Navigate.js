@@ -35,7 +35,7 @@ class Navigate extends React.Component {
           <bs.Nav className="mr-auto">
           <Link to ="/jobs" className="nav-link">Jobs</Link>
           <Link to ="/nav" className="nav-link">Events</Link>
-          <Link to ="/nav" className="nav-link">Students</Link>
+          <Link to ="/students" className="nav-link">Students</Link>
           <Link to="/profile" className="nav-link">Profile</Link>
           <Link to="/logout" className="nav-link">Logout</Link>
           </bs.Nav>

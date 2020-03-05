@@ -30,7 +30,6 @@ class CompanyProfile extends React.Component {
                 description : res.data[0].descrption,
                 email : res.data[0].email,
                 location : res.data[0].location,
-                description : res.data[0].description,
                 mob : res.data[0].mob,
                 profile_pic : res.data[0].profile_pic
             })

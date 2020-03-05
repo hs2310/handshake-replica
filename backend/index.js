@@ -5,6 +5,9 @@ var bodyParser = require('body-parser');
 var session = require('express-session');
 var cookieParser = require('cookie-parser');
 var cors = require('cors');
+const multer = require('multer');
+var path = require('path');
+// app.use(bodyParser.urlencoded({extended: true}))
 app.set('view engine', 'ejs');
 
 //use cors to allow cross origin resource sharing
@@ -34,7 +37,19 @@ app.use(function (req, res, next) {
     next();
 });
 
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'uploads/')
+    },
+    filename: function (req, file, callback) {
+        callback(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname))
+    }
+});
 
+const upload = multer({
+    storage: storage,
+})
+app.use('/uploads', express.static(path.join(__dirname, '/uploads')));
 const mysql = require('mysql2');
 
 // get the promise implementation, we will use bluebird
@@ -106,18 +121,18 @@ app.post('/login', function (req, res) {
         if (results.length > 0) {
             // if (user.username === req.body.username && user.password === req.body.password) {
             res.cookie('cookie', req.session.id, { maxAge: 900000, httpOnly: false, path: '/' });
-            let id = null ;
+            let id = null;
             if (table === "students") {
                 req.session.user = results[0].sid;
                 req.session.type = "student";
                 id = results[0].sid;
-                
+
             }
             else {
                 req.session.user = results[0].cid;
                 req.session.type = "company";
                 id = results[0].cid;
-                
+
             }
             console.log(results[0].sid)
             // res.writeHead(200, {
@@ -184,7 +199,7 @@ app.post('/DeleteSkill', (req, res) => {
     async function getSkills() {
         const mysql = require('mysql2/promise');
         const conn = await mysql.createConnection({ host: 'localhost', user: 'root', database: 'handshake' });
-        const [error, results] = await conn.query('DELETE FROM `skillset`  WHERE id = ?;' , [Number(req.body.id)]);
+        const [error, results] = await conn.query('DELETE FROM `skillset`  WHERE id = ?;', [Number(req.body.id)]);
         await conn.end();
     }
 
@@ -199,7 +214,7 @@ app.post('/UpdateSkill', (req, res) => {
     async function getSkills() {
         const mysql = require('mysql2/promise');
         const conn = await mysql.createConnection({ host: 'localhost', user: 'root', database: 'handshake' });
-        const [error, results] = await conn.query('INSERT INTO `skillset` (sid,skid) VALUES (?,?)', [req.body.sid, req.body.selectSkill]);
+        const [rows, fields] = await conn.query('INSERT INTO `skillset` (sid,skid) VALUES (?,?)', [req.body.sid, req.body.selectSkill]);
         await conn.end();
         return rows;
     }
@@ -230,7 +245,7 @@ app.post('/studentExperience', (req, res) => {
     async function getExperience() {
         const mysql = require('mysql2/promise');
         const conn = await mysql.createConnection({ host: 'localhost', user: 'root', database: 'handshake' });
-        const [rows, f3] = await conn.execute('SELECT * FROM `experience` WHERE sid = '+req.body.sid);
+        const [rows, f3] = await conn.execute('SELECT * FROM `experience` WHERE sid = ?', [Number(req.body.sid)]);
         await conn.end();
         // return Object.assign({}, rows);
         return rows;
@@ -262,16 +277,16 @@ app.post('/insertExperience', (req, res) => {
         // console.log(r);
     })
 })
-app.put('/updateExperience', (req,res) =>{
+app.put('/updateExperience', (req, res) => {
     console.log(req.body);
     async function updateExperience() {
         const mysql = require('mysql2/promise');
         const conn = await mysql.createConnection({ host: 'localhost', user: 'root', database: 'handshake' });
-        const [error, results] = await conn.query('UPDATE `experience` SET job_title = ?, employer = ?, start = ?, end = ?, current_position = ? ,location = ? ,Description = ? WHERE id = ?' , [req.body.job_title, req.body.employer, req.body.start, req.body.end, req.body.current_position, req.body.location, req.body.description, Number(req.body.id)]);
-        
+        const [error, results] = await conn.query('UPDATE `experience` SET job_title = ?, employer = ?, start = ?, end = ?, current_position = ? ,location = ? ,Description = ? WHERE id = ?', [req.body.job_title, req.body.employer, req.body.start, req.body.end, req.body.current_position, req.body.location, req.body.description, Number(req.body.id)]);
+
         await conn.end();
         // return Object.assign({}, rows);
-        if (error){ 
+        if (error) {
             console.log(error);
             return res.send(error)
         }
@@ -287,17 +302,17 @@ app.put('/updateExperience', (req,res) =>{
         // console.log(r);
     })
 })
-app.post('/deleteExperience', (req,res) =>{
+app.post('/deleteExperience', (req, res) => {
     console.log(req.body);
     async function updateExperience() {
         const mysql = require('mysql2/promise');
         const conn = await mysql.createConnection({ host: 'localhost', user: 'root', database: 'handshake' });
-        const [error, results] = await conn.query('DELETE FROM `experience`  WHERE id = ?;' , [Number(req.body.id)]);
-        
+        const [error, results] = await conn.query('DELETE FROM `experience`  WHERE id = ?;', [Number(req.body.id)]);
+
         await conn.end();
         // return Object.assign({}, rows);
-        if (error){ 
-            
+        if (error) {
+
             return res.send(error)
         }
         else {
@@ -317,7 +332,7 @@ app.post('/insertEducation', (req, res) => {
     async function getExperience() {
         const mysql = require('mysql2/promise');
         const conn = await mysql.createConnection({ host: 'localhost', user: 'root', database: 'handshake' });
-        const [error, results] = await conn.query('INSERT INTO `education` (sid,school_name,edu_level,start,end,major,minor,gpa,cgpa,hide_gpa,hide_cgpa)  VALUES (?,?,?,?,?,?,?,?,?,?,?)', [req.body.sid, req.body.school_name, req.body.edu_level, req.body.start, req.body.end, req.body.major, req.body.minor, req.body.gpa,req.body.cgpa,req.body.hide_gpa,req.body.hide_cgpa]);
+        const [error, results] = await conn.query('INSERT INTO `education` (sid,school_name,edu_level,start,end,major,minor,gpa,cgpa,hide_gpa,hide_cgpa)  VALUES (?,?,?,?,?,?,?,?,?,?,?)', [req.body.sid, req.body.school_name, req.body.edu_level, req.body.start, req.body.end, req.body.major, req.body.minor, req.body.gpa, req.body.cgpa, req.body.hide_gpa, req.body.hide_cgpa]);
         await conn.end();
         // return Object.assign({}, rows);
         if (error) return res.send(error);
@@ -332,16 +347,16 @@ app.post('/insertEducation', (req, res) => {
         // console.log(r);
     })
 })
-app.post('/updateEducation', (req,res) =>{
+app.post('/updateEducation', (req, res) => {
     // console.log(req.body);
     async function updateEducation() {
         const mysql = require('mysql2/promise');
         const conn = await mysql.createConnection({ host: 'localhost', user: 'root', database: 'handshake' });
-        const [error, results] = await conn.execute('UPDATE `education` SET school_name = ?, edu_level = ?, start = ?, end = ?, major = ? ,minor = ? ,gpa = ?, cgpa = ? , hide_gpa = ?, hide_cgpa = ? WHERE id = ?' , [req.body.school_name, req.body.edu_level, req.body.start, req.body.end, req.body.major, req.body.minor, req.body.gpa,req.body.cgpa,req.body.hide_gpa,req.body.hide_cgpa, Number(req.body.id)]);
-        
+        const [error, results] = await conn.execute('UPDATE `education` SET school_name = ?, edu_level = ?, start = ?, end = ?, major = ? ,minor = ? ,gpa = ?, cgpa = ? , hide_gpa = ?, hide_cgpa = ? WHERE id = ?', [req.body.school_name, req.body.edu_level, req.body.start, req.body.end, req.body.major, req.body.minor, req.body.gpa, req.body.cgpa, req.body.hide_gpa, req.body.hide_cgpa, Number(req.body.id)]);
+
         await conn.end();
         // return Object.assign({}, rows);
-        if (error){ 
+        if (error) {
             return res.send(error)
         }
         else {
@@ -356,16 +371,16 @@ app.post('/updateEducation', (req,res) =>{
         // console.log(r);
     })
 })
-app.post('/deleteEducation', (req,res) =>{
+app.post('/deleteEducation', (req, res) => {
     console.log(req.body);
     async function deleteEducation() {
         const mysql = require('mysql2/promise');
         const conn = await mysql.createConnection({ host: 'localhost', user: 'root', database: 'handshake' });
-        const [error, results] = await conn.query('DELETE FROM `education`  WHERE id = ?;' , [Number(req.body.id)]);
-        
+        const [error, results] = await conn.query('DELETE FROM `education`  WHERE id = ?;', [Number(req.body.id)]);
+
         await conn.end();
         // return Object.assign({}, rows);
-        if (error){ 
+        if (error) {
             console.log(error);
             return res.send(error)
         }
@@ -381,16 +396,16 @@ app.post('/deleteEducation', (req,res) =>{
         // console.log(r);
     })
 })
-app.post('/UpdateInfo', (req,res) =>{
+app.post('/UpdateInfo', (req, res) => {
     console.log(req.body);
     async function updateInfo() {
         const mysql = require('mysql2/promise');
         const conn = await mysql.createConnection({ host: 'localhost', user: 'root', database: 'handshake' });
-        const [error, results] = await conn.query('UPDATE `students` SET name = ? , college = ?, dob = ? WHERE sid = ?;' , [req.body.name, req.body.college, req.body.dob,Number(req.body.sid)]);
-        
+        const [error, results] = await conn.query('UPDATE `students` SET name = ? , college = ?, dob = ? WHERE sid = ?;', [req.body.name, req.body.college, req.body.dob, Number(req.body.sid)]);
+
         await conn.end();
         // return Object.assign({}, rows);
-        if (error){ 
+        if (error) {
             return res.send(error)
         }
         else {
@@ -405,16 +420,16 @@ app.post('/UpdateInfo', (req,res) =>{
         // console.log(r);
     })
 })
-app.post('/UpdateContactInfo', (req,res) =>{
+app.post('/UpdateContactInfo', (req, res) => {
     console.log(req.body);
     async function updateInfo() {
         const mysql = require('mysql2/promise');
         const conn = await mysql.createConnection({ host: 'localhost', user: 'root', database: 'handshake' });
-        const [error, results] = await conn.execute('UPDATE `students` SET mob = ? , email = ? WHERE sid = ?;' , [req.body.mob, req.body.email,Number(req.body.sid)]);
-        
+        const [error, results] = await conn.execute('UPDATE `students` SET mob = ? , email = ? WHERE sid = ?;', [req.body.mob, req.body.email, Number(req.body.sid)]);
+
         await conn.end();
         // return Object.assign({}, rows);
-        if (error){ 
+        if (error) {
             return res.send(error)
         }
         else {
@@ -429,16 +444,16 @@ app.post('/UpdateContactInfo', (req,res) =>{
         // console.log(r);
     })
 })
-app.post('/UpdateJourney', (req,res) =>{
+app.post('/UpdateJourney', (req, res) => {
     console.log(req.body);
     async function updateInfo() {
         const mysql = require('mysql2/promise');
         const conn = await mysql.createConnection({ host: 'localhost', user: 'root', database: 'handshake' });
-        const [error, results] = await conn.query('UPDATE `students` SET objective = ? WHERE sid = ?;' , [req.body.objective, Number(req.body.sid)]);
-        
+        const [error, results] = await conn.query('UPDATE `students` SET objective = ? WHERE sid = ?;', [req.body.objective, Number(req.body.sid)]);
+
         await conn.end();
         // return Object.assign({}, rows);
-        if (error){ 
+        if (error) {
             return res.send(error)
         }
         else {
@@ -454,16 +469,16 @@ app.post('/UpdateJourney', (req,res) =>{
     })
 })
 
-app.get('/getJobs',(req,res)=>{
+app.get('/getJobs', (req, res) => {
     // console.log(req.body);
     async function updateInfo() {
         const mysql = require('mysql2/promise');
         const conn = await mysql.createConnection({ host: 'localhost', user: 'root', database: 'handshake' });
         const [error, results] = await conn.execute('SELECT `job_List`.* , `company`.* FROM `job_List` INNER JOIN  `company` ON (`job_List`.cid = `company`.cid )');
-        
+
         await conn.end();
         // return Object.assign({}, rows);
-        if (error){ 
+        if (error) {
             return error;
         }
         else {
@@ -478,12 +493,12 @@ app.get('/getJobs',(req,res)=>{
         // console.log(r);
     })
 })
-app.get('/getCompany',(req,res)=>{
+app.get('/getCompany', (req, res) => {
     async function updateInfo() {
         const mysql = require('mysql2/promise');
         const conn = await mysql.createConnection({ host: 'localhost', user: 'root', database: 'handshake' });
-        const [rows ,  fields] = await conn.execute('SELECT `job_List`.* , `company`.* FROM `job_List` INNER JOIN  `company` ON (`job_List`.cid = `company`.cid )');
-        
+        const [rows, fields] = await conn.execute('SELECT `job_List`.* , `company`.* FROM `job_List` INNER JOIN  `company` ON (`job_List`.cid = `company`.cid )');
+
         await conn.end();
         // return Object.assign({}, rows);
         // if (error){ 
@@ -502,21 +517,21 @@ app.get('/getCompany',(req,res)=>{
         // console.log(r);
     })
 })
-app.post("/getCompanyDetails", (req,res) => {
+app.post("/getCompanyDetails", (req, res) => {
     console.log(req.body)
     async function updateInfo() {
         const mysql = require('mysql2/promise');
         const conn = await mysql.createConnection({ host: 'localhost', user: 'root', database: 'handshake' });
-        const [rows,fields] = await conn.query('SELECT * FROM `company` WHERE cid = 1');
-        
+        const [rows, fields] = await conn.query('SELECT * FROM `company` WHERE cid = 1');
+
         await conn.end();
         // return Object.assign({}, rows);
         // if (error){ 
         //     return res.send(error)
         // }
         // else {
-            // console.log(results)
-            return rows;
+        // console.log(results)
+        return rows;
         // }
     }
 
@@ -527,5 +542,56 @@ app.post("/getCompanyDetails", (req,res) => {
     })
 })
 //start your server on port 3001
+app.post('/applyJobs', upload.single('file'), function (req, res) {
+    console.log(req)
+    async function updateInfo() {
+        var host = req.hostname;
+        console.log("Hostname", host)
+        console.log("File", req.file)
+        // req.body.studentId = 1
+        var imagepath = req.protocol + "://" + host + ':3001/' + req.file.path;
+        const mysql = require('mysql2/promise');
+        const conn = await mysql.createConnection({ host: 'localhost', user: 'root', database: 'handshake' });
+        const [error, results] = await conn.query('INSERT INTO `job_applied` INTO (jid,sid,status,resume_url) VALUES(?,?,?,?)',[req.body.jid,req.body.sid,"PENDING",imagepath]);
+        await conn.end();
+        // return Object.assign({}, rows);
+        if (error){ 
+            return res.send(error)
+        }
+        else {
+        // console.log(results)
+        return results;
+        }
+    }
+
+    data = updateInfo()
+    data.then((r) => {
+        res.send(r);
+        console.log(r);
+    })
+});
+app.post("/getApplicaion",(req,res)=>{
+    async function updateInfo() {
+        const mysql = require('mysql2/promise');
+        const conn = await mysql.createConnection({ host: 'localhost', user: 'root', database: 'handshake' });
+        const [rows, fields] = await conn.query('SELECT job_applied.*, job_list.title, company.name FROM `job_applied` INNER JOIN `job_list` ON (`job_applied`.`jid` = `job_list`.`jid`) INNER JOIN `company` ON (`job_list`.cid = `company`.cid) WHERE `job_applied`.sid = ?', [req.body.sid]);
+
+        await conn.end();
+        // return Object.assign({}, rows);
+        // if (error){ 
+        //     return res.send(error)
+        // }
+        // else {
+        // console.log(results)
+        return rows;
+        // }
+    }
+
+    data = updateInfo()
+    data.then((r) => {
+        res.send(r);
+        console.log(r);
+    })
+})
 app.listen(3001);
 console.log("Server Listening on port 3001"); 
