@@ -1,0 +1,123 @@
+import React from 'react';
+import Jobs from '../../Jobs/Jobs';
+import axios from 'axios';
+class CJobSearch extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            posted_jobs: [],
+            toggle_post: false,
+            displayJobs: ''
+        }
+        this.toggle = this.toggle.bind(this)
+    }
+    async componentDidMount() {
+        let data = {
+            cid: localStorage.getItem('id')
+        }
+        await axios.post("http://localhost:3001/getPostedJobs", data).then(r => {
+            this.setState({
+                posted_jobs: r.data
+            })
+            console.log(this.state.posted_jobs)
+        })
+        this.setState({
+            displayJobs: { ...this.state.posted_jobs[0] }
+        })
+    }
+    display(i) {
+        console.log(i)
+        this.setState({
+            displayJobs: { ...this.state.posted_jobs[i] }
+        })
+    }
+    toggle() {
+        if (this.state.toggle_post === true)
+            this.setState({
+                toggle_post: false
+            })
+        else
+            this.setState({
+                toggle_post: true
+            })
+    }
+    render() {
+        let displayJobs = this.state.displayJobs;
+        let postJob = null;
+        let jobList = Object.keys(this.state.posted_jobs).map((item, i) => (
+            <div className="card" key={i} onClick={() => { this.display(item) }}>
+                <div className="card-body">
+                    <h5 className="card-title">{this.state.posted_jobs[item].title}</h5>
+                    <h6 className="card-subtitle mb-2 text-muted">{this.state.posted_jobs[item].name}</h6>
+                    <p className="card-text">{this.state.posted_jobs[item].location}</p>
+                    <p className="card-text">{this.state.posted_jobs[item].job_category}</p>
+                </div>
+            </div>
+        ))
+        if (this.state.toggle_post === true)
+            postJob = <div className="row">
+                <div className="col-md-12">
+                    <div className="card">
+                        <div className="card-body">
+                            <h4>Post a Job</h4>
+                            <form>
+                                <div className="form-group">
+                                    <input type="text" name="title" onChange={this.changeHandler} placeholder="Job Title" className="form-control" />
+                                </div>
+                                <div className="form-group">
+                                    <input type="text" name="posting_date" onChange={this.changeHandler} placeholder="Posting Date (DD-MM-YYYY)" className="form-control" />
+                                </div>
+                                <div className="form-group">
+                                    <input type="text" name="deadline" onChange={this.changeHandler} placeholder="Deadline (DD-MM-YYYY)" className="form-control" />
+                                </div>
+                                <div className="form-group">
+                                    <input type="text" name="location" onChange={this.changeHandler} placeholder="Location" className="form-control" />
+                                </div>
+                                <div className="form-group">
+                                    <input type="number" name="salary" onChange={this.changeHandler} placeholder="Salary per annum" className="form-control" />
+                                </div>
+                                <div className="form-group">
+                                    <textarea className="form-control" name="job_description" placeholder="Job description"></textarea>
+                                </div>
+                                <div className="form-group">
+                                    <input type="text" name="job_category" onChange={this.changeHandler} placeholder="Job Category" className="form-control" />
+                                </div>
+                                <button className="btn btn-primary">Post a Job</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        else
+            postJob = null
+        return <div>
+            <Jobs />
+
+            <div className="container" style={{ marginTop: '1%' }}>
+                <div className="row">
+                    <div className="col-md-12">
+                        <button type="button" onClick={this.toggle} className="btn btn-primary">Post a Job</button>
+                    </div>
+                </div>
+                {postJob}
+                <div className="row">
+                    <div className="col-md-4">
+                        {jobList}
+                    </div>
+                    <div className="col-md-8">
+                        <div className="card">
+                            <div className="card-body">
+                                <h5 className="card-title">{displayJobs.title}</h5>
+                                <p className="card-text">{displayJobs.salary}</p>
+                                <p className="card-text">{displayJobs.location}</p>
+                                <p className="card-text">{displayJobs.job_category}</p>
+                                <p className="card-text">{displayJobs.job_description}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}
+export default CJobSearch;

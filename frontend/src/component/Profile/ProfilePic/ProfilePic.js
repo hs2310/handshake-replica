@@ -15,7 +15,7 @@ class ProfilePic extends React.Component {
         this.updateInfo = this.updateInfo.bind(this);
     }
     componentDidMount (){
-      let data ={id : '1'}
+      let data ={sid : '1' , call: "profile pic"}
       axios.post("http://localhost:3001/studentData", data).then(res => {
       this.setState({
         data: res.data[0],

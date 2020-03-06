@@ -4,8 +4,9 @@ export function ProfileMiddleware() {
     return function (next) {
         return async function (action) {
             if (action.type === GET_STUDENT) {
-                console.log(action.payload.id);
-                await axios.post("http://localhost:3001/studentData", action.payload.id).then(res =>{    
+                console.log("ID : " + action.payload.id);
+                await axios.post("http://localhost:3001/studentData",{"sid" : localStorage.getItem('id')} ).then(res =>{    
+                    console.log(res.data[0])
                     action.payload.sid = res.data[0].sid;
                     action.payload.name=res.data[0].name;
                     action.payload.email=res.data[0].email;
@@ -22,6 +23,7 @@ export function ProfileMiddleware() {
                 // const res2 = axios.post("http://localhost:3001/studentSkills", action.payload.id)
                 // const res3 = axios.post("http://localhost:3001/studentEducation", action.payload.id)
                 // const res4 = axios.post("http://localhost:3001/studentExperience", action.payload.id)
+
                 // const res5 = axios.post("http://localhost:3001/getSkills", action.payload.id)
                 // Promise.all([res1, res2, res3, res4, res5]).then(values => {
                     

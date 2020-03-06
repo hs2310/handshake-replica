@@ -16,10 +16,15 @@ export function AuthMiddleware() {
           }
           if (action.payload.company === false) {
             action.payload.type = 'students';
+            localStorage.setItem('type','students');
+            localStorage.setItem('id',response.data)
           }
           else if (action.payload.company === true) {
             action.payload.type = 'company';
+            localStorage.setItem('type','company')
+            localStorage.setItem('id',response.data)
           }
+          
           console.log("ACTION" + action.payload);
         }).catch(e => {
 

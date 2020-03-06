@@ -151,10 +151,11 @@ app.post('/login', function (req, res) {
 
 });
 app.post('/studentData', (req, res) => {
+    console.log(req.body)
     async function getStudent() {
         const mysql = require('mysql2/promise');
         const conn = await mysql.createConnection({ host: 'localhost', user: 'root', database: 'handshake' });
-        const [rows, fields] = await conn.execute('SELECT * FROM `students` WHERE sid = "1"');
+        const [rows, fields] = await conn.execute('SELECT * FROM `students` WHERE sid = ?',[req.body.sid]);
         await conn.end();
         return rows;
     }
@@ -166,10 +167,11 @@ app.post('/studentData', (req, res) => {
     })
 })
 app.post('/studentSkills', (req, res) => {
+    console.log(req.body.sid)
     async function getSkills() {
         const mysql = require('mysql2/promise');
         const conn = await mysql.createConnection({ host: 'localhost', user: 'root', database: 'handshake' });
-        const [rows, f1] = await conn.execute('SELECT `skills`.*,`skillset`.* FROM `skills` INNER JOIN `skillset` ON (skills.skid = skillset.skid AND skillset.sid = "1" )');
+        const [rows, f1] = await conn.execute('SELECT `skills`.*,`skillset`.* FROM `skills` INNER JOIN `skillset` ON (skills.skid = skillset.skid AND skillset.sid = ? )', [req.body.sid]);
         await conn.end();
         return rows;
     }
@@ -226,10 +228,11 @@ app.post('/UpdateSkill', (req, res) => {
     })
 })
 app.post('/studentEducation', (req, res) => {
+
     async function getEducation() {
         const mysql = require('mysql2/promise');
         const conn = await mysql.createConnection({ host: 'localhost', user: 'root', database: 'handshake' });
-        const [rows, f2] = await conn.execute('SELECT * FROM `education` WHERE sid = "1"');
+        const [rows, f2] = await conn.execute('SELECT * FROM `education` WHERE sid = ?',[req.body.sid]);
         await conn.end();
         //return Object.assign({}, rows);
         return rows;
@@ -265,7 +268,7 @@ app.post('/insertExperience', (req, res) => {
         const [error, results] = await conn.query('INSERT INTO `experience` (sid, job_title, employer, start, end, current_position, location, Description) VALUES (?,?,?,?,?,?,?,?)', [req.body.sid, req.body.job_title, req.body.employer, req.body.start, req.body.end, req.body.current_position, req.body.location, req.body.description]);
         await conn.end();
         // return Object.assign({}, rows);
-        if (error) return res.send(error);
+        if (error) return error;
         else {
             return "Inserted";
         }
@@ -288,7 +291,7 @@ app.put('/updateExperience', (req, res) => {
         // return Object.assign({}, rows);
         if (error) {
             console.log(error);
-            return res.send(error)
+            return error
         }
         else {
             console.log(results)
@@ -313,7 +316,7 @@ app.post('/deleteExperience', (req, res) => {
         // return Object.assign({}, rows);
         if (error) {
 
-            return res.send(error)
+            return error
         }
         else {
             console.log(results)
@@ -335,7 +338,7 @@ app.post('/insertEducation', (req, res) => {
         const [error, results] = await conn.query('INSERT INTO `education` (sid,school_name,edu_level,start,end,major,minor,gpa,cgpa,hide_gpa,hide_cgpa)  VALUES (?,?,?,?,?,?,?,?,?,?,?)', [req.body.sid, req.body.school_name, req.body.edu_level, req.body.start, req.body.end, req.body.major, req.body.minor, req.body.gpa, req.body.cgpa, req.body.hide_gpa, req.body.hide_cgpa]);
         await conn.end();
         // return Object.assign({}, rows);
-        if (error) return res.send(error);
+        if (error) return error;
         else {
             return "Inserted";
         }
@@ -357,7 +360,7 @@ app.post('/updateEducation', (req, res) => {
         await conn.end();
         // return Object.assign({}, rows);
         if (error) {
-            return res.send(error)
+            return error
         }
         else {
             // console.log(results)
@@ -382,7 +385,7 @@ app.post('/deleteEducation', (req, res) => {
         // return Object.assign({}, rows);
         if (error) {
             console.log(error);
-            return res.send(error)
+            return error
         }
         else {
             console.log(results)
@@ -406,7 +409,7 @@ app.post('/UpdateInfo', (req, res) => {
         await conn.end();
         // return Object.assign({}, rows);
         if (error) {
-            return res.send(error)
+            return error
         }
         else {
             // console.log(results)
@@ -430,7 +433,7 @@ app.post('/UpdateContactInfo', (req, res) => {
         await conn.end();
         // return Object.assign({}, rows);
         if (error) {
-            return res.send(error)
+            return error
         }
         else {
             // console.log(results)
@@ -454,7 +457,7 @@ app.post('/UpdateJourney', (req, res) => {
         await conn.end();
         // return Object.assign({}, rows);
         if (error) {
-            return res.send(error)
+            return error
         }
         else {
             // console.log(results)
@@ -502,7 +505,7 @@ app.get('/getCompany', (req, res) => {
         await conn.end();
         // return Object.assign({}, rows);
         // if (error){ 
-        //     return res.send(error)
+        //     return error
         // }
         // else {
         //     // console.log(results)
@@ -522,12 +525,12 @@ app.post("/getCompanyDetails", (req, res) => {
     async function updateInfo() {
         const mysql = require('mysql2/promise');
         const conn = await mysql.createConnection({ host: 'localhost', user: 'root', database: 'handshake' });
-        const [rows, fields] = await conn.query('SELECT * FROM `company` WHERE cid = 1');
+        const [rows, fields] = await conn.query('SELECT * FROM `company` WHERE cid = ?' , [req.body.cid]);
 
         await conn.end();
         // return Object.assign({}, rows);
         // if (error){ 
-        //     return res.send(error)
+        //     return error
         // }
         // else {
         // console.log(results)
@@ -556,7 +559,7 @@ app.post('/applyJobs', upload.single('file'), function (req, res) {
         await conn.end();
         // return Object.assign({}, rows);
         if (error){ 
-            return res.send(error)
+            return error
         }
         else {
         // console.log(results)
@@ -579,7 +582,7 @@ app.post("/getApplicaion",(req,res)=>{
         await conn.end();
         // return Object.assign({}, rows);
         // if (error){ 
-        //     return res.send(error)
+        //     return error
         // }
         // else {
         // console.log(results)
@@ -592,6 +595,126 @@ app.post("/getApplicaion",(req,res)=>{
         res.send(r);
         console.log(r);
     })
+})
+app.get('/getAllStudents', (req, res) => {
+    async function updateInfo() {
+        const mysql = require('mysql2/promise');
+        const conn = await mysql.createConnection({ host: 'localhost', user: 'root', database: 'handshake' });
+        const [rows, fields] = await conn.execute('SELECT * FROM `students`');
+
+        await conn.end();
+        // return Object.assign({}, rows);
+        // if (error){ 
+        //     return error
+        // }
+        // else {
+        //     // console.log(results)
+        //     return "Updated";
+        // }
+        return rows;
+    }
+
+    data = updateInfo()
+    data.then((r) => {
+        
+        res.send(r);
+    })
+})
+app.post('/UpdateCompanyContactInfo', (req, res) => {
+    console.log(req.body);
+    async function updateInfo() {
+        const mysql = require('mysql2/promise');
+        const conn = await mysql.createConnection({ host: 'localhost', user: 'root', database: 'handshake' });
+        const [error, results] = await conn.execute('UPDATE `company` SET mob = ? , email = ? WHERE cid = ?;', [req.body.mob, req.body.email, Number(req.body.cid)]);
+
+        await conn.end();
+        // return Object.assign({}, rows);
+        if (error) {
+            return error
+        }
+        else {
+            // console.log(results)
+            return "Updated";
+        }
+    }
+
+    data = updateInfo()
+    data.then((r) => {
+        res.send(r);
+        // console.log(r);
+    })
+})
+app.post('/UpdateCompanyJourney', (req, res) => {
+    console.log(req.body);
+    async function updateInfo() {
+        const mysql = require('mysql2/promise');
+        const conn = await mysql.createConnection({ host: 'localhost', user: 'root', database: 'handshake' });
+        const [error, results] = await conn.execute('UPDATE `company` SET description = ? WHERE cid = ?;', [req.body.objective, Number(req.body.cid)]);
+
+        await conn.end();
+        // return Object.assign({}, rows);
+        if (error) {
+            return error
+        }
+        else {
+            // console.log(results)
+            return results;
+        }
+    }
+
+    data = updateInfo()
+    data.then((r) => {
+        res.send(r);
+        console.log(r);
+    })
+})
+app.post('/UpdateCompanyInfo', (req, res) => {
+    console.log(req.body);
+    async function updateInfo() {
+        const mysql = require('mysql2/promise');
+        const conn = await mysql.createConnection({ host: 'localhost', user: 'root', database: 'handshake' });
+        const [error, results] = await conn.query('UPDATE `company` SET name = ? , location = ? WHERE cid = ?;', [req.body.name, req.body.college, req.body.dob, Number(req.body.cid)]);
+
+        await conn.end();
+        // return Object.assign({}, rows);
+        if (error) {
+            return error
+        }
+        else {
+            // console.log(results)
+            return "Updated";
+        }
+    }
+
+    data = updateInfo()
+    data.then((r) => {
+        res.send(r);
+        // console.log(r);
+    })
+})
+app.post("/getPostedJobs" , (req,res) =>{
+    console.log(req.body)
+    async function updateInfo() {
+        const mysql = require('mysql2/promise');
+        const conn = await mysql.createConnection({ host: 'localhost', user: 'root', database: 'handshake' });
+        const [error, results] = await conn.query('SELECT * FROM `job_list` WHERE cid = ?;', [Number(req.body.cid)]);
+
+        await conn.end();
+        // return Object.assign({}, rows);
+        if (error) {
+            return error
+        }
+        else {
+            // console.log(results)
+            return "Updated";
+        }
+    }
+
+    data = updateInfo()
+    data.then((r) => {
+        res.send(r);
+        // console.log(r);
+    }) 
 })
 app.listen(3001);
 console.log("Server Listening on port 3001"); 

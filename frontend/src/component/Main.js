@@ -10,26 +10,49 @@ import Profile from './Profile/Profile'
 import Register from './Register/Register';
 // import Jobs from './Jobs/Jobs'
 import {Switch,Route} from 'react-router-dom';
-import JobSearch from './JobSearch.js/JobSearch';
+import JobSearch from './JobSearch/JobSearch';
 import CompanyProfile from './company/CompanyProfile';
-import StudentApplication from './StudentApplication/StudentApplication'
+import StudentApplication from './StudentApplication/StudentApplication';
+import StudentDetails from './StudentDetails/StudentDetails';
+import StudentProfile from './StudentProfile/StudentProfile';
+import CProfile from './company-side/Profile/Profile';
+import CJobSearch from './company-side/CJobSearch/CJobSearch';
 //Main Component
 class Main extends Component {
   render() {
+
+    
     return (
         <div>
         {/*Render Different Component based on Route*/}
         <Switch>
         <Route exact path="/" component={Login}/>
-        <Route path="/home" component={JobSearch}/>
+        <Route path="/home" render={ () => {
+          if(localStorage.getItem('type') === 'company')
+            return <CJobSearch />
+          else
+            return <JobSearch />    
+        }}/>
         <Route path="/nav" component={Home}/>
         <Route path="/jobs" component={JobSearch}/>
-        <Route path="/profile" component={Profile}/>
+        <Route path="/profile" render={ () => {
+          if(localStorage.getItem('type') === 'company')
+            return <CProfile />
+          else
+            return <Profile />    
+        }}/>
         <Route exact path="/register" component={Register}/>
         <Route exact path="/logout" component={Logout}/>
-        <Route path="/jobSearch" component={JobSearch}/>
+        <Route path="/jobSearch" render={ () => {
+          if(localStorage.getItem('type') === 'company')
+            return <CJobSearch />
+          else
+            return <JobSearch />    
+        }}/>
         <Route path = "/displayCompany/:id" component={CompanyProfile} />
+        <Route path = "/displayStudent/:id" component={StudentProfile} />
         <Route path = "/studentApplications" component={StudentApplication} />
+        <Route path = "/students" component = {StudentDetails} />
         {/* <DisplayCompany/>
         </Route> */}
         {/* <Route path="/home" component={Home}/>

@@ -16,9 +16,9 @@ class GeneralInfo extends React.Component {
         this.educationChangeHandler = this.educationChangeHandler.bind(this);
         this.updateInfo = this.updateInfo.bind(this);
     }
-    componentDidMount (){
-      let data ={id : this.props.id}
-      axios.post("http://localhost:3001/studentData", data).then(res => {
+    async componentDidMount (){
+      let data ={sid : this.props.id , call : "generaliInfo"}
+      await axios.post("http://localhost:3001/studentData", data).then(res => {
       this.setState({
         data: res.data[0],
         profile_pic: res.data[0].profile_pic,
@@ -97,8 +97,8 @@ class GeneralInfo extends React.Component {
 const mapStateToProps = state => {
 
   return { 
-      id: state.id,
-      type: state.type
+      id: state.rootReducer.id,
+      type: state.rootReducer.type
   };
 };
 export default connect(mapStateToProps)(GeneralInfo);

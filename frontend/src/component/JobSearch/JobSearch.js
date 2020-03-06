@@ -32,7 +32,7 @@ class JobSearch extends React.Component {
   }
   render() {
     let applyForm = null;
-    
+
     let displayJobs = this.state.displayJobs;
     let jobList = Object.keys(this.props.jobs).map((item, i) => (
       <div className="card" key={i} onClick={() => { this.display(item) }}>
@@ -43,10 +43,10 @@ class JobSearch extends React.Component {
           <p className="card-text">{this.props.jobs[item].job_category}</p>
         </div>
       </div>
-    
+
     ))
-    if(this.state.apply)
-      applyForm = <ApplicationForm jobs={displayJobs}/>
+    if (this.state.apply)
+      applyForm = <ApplicationForm jobs={displayJobs} />
     return <div>
       {/* <Navigate />
       <nav className="navbar navbar-expand-sm bg-light navbar-light">
@@ -59,7 +59,7 @@ class JobSearch extends React.Component {
           </li>
         </ul>
       </nav> */}
-      <Jobs/>
+      <Jobs />
       <div>
         <div className="container">
           <div className="row">
@@ -68,22 +68,23 @@ class JobSearch extends React.Component {
           </div>
           <div className="row">
             <div className="col-md-4">
-            {jobList}
+              {jobList}
             </div>
             <div className="col-md-8">
               <div className="card">
-        <div className="card-body">
-          <h5 className="card-title">{displayJobs.title}</h5>
-          <h6 className="card-subtitle mb-2 text-muted">
-            <Link to={"/displayCompany/" + displayJobs.cid}>{displayJobs.name}</Link>
-          </h6>
-          <p className="card-text">{displayJobs.location}</p>
-          <p className="card-text">{displayJobs.job_category}</p>
-          <p className="card-text">{displayJobs.job_description}</p>
-          <button type="button" onClick={() =>{this.setState({apply : true})}} className="btn btn-primary">Apply</button>
-          {applyForm}
-        </div>
-      </div>
+                <div className="card-body">
+                  <h5 className="card-title">{displayJobs.title}</h5>
+                  <h6 className="card-subtitle mb-2 text-muted">
+                    <Link to={"/displayCompany/" + displayJobs.cid}>{displayJobs.name}</Link>
+                  </h6>
+                  <p className="card-text">{displayJobs.salary}</p>
+                  <p className="card-text">{displayJobs.location}</p>
+                  <p className="card-text">{displayJobs.job_category}</p>
+                  <p className="card-text">{displayJobs.job_description}</p>
+                  <button type="button" onClick={() => { this.setState({ apply: true }) }} className="btn btn-primary">Apply</button>
+                  {applyForm}
+                </div>
+              </div>
             </div>
           </div>
         </div>

@@ -133,8 +133,8 @@ class Education extends React.Component {
 const mapStateToProps = state => {
 
   return { 
-      id: state.id,
-      type: state.type
+      id: state.rootReducer.id,
+      type: state.rootReducer.type
   };
 };
 export default connect(mapStateToProps)(Education);

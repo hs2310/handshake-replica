@@ -1,12 +1,11 @@
 import React from 'react';
 import axios from 'axios';
-import {connect} from 'react-redux';
-class ContactInfo extends React.Component {
+
+class CContactInfo extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             update_contact_info: false,
-            data: '',
             mob:'',
             email:''
         }
@@ -15,16 +14,11 @@ class ContactInfo extends React.Component {
         this.updateInfo = this.updateInfo.bind(this);
     }
     async componentDidMount() {
-        let data = { sid: this.props.id, call: 'contact' }
-        await axios.post("http://localhost:3001/studentData", data).then(res => {
             this.setState({
-                data: res.data[0],
-                email: res.data[0].email,
-                mob: res.data[0].mob
+                cid : this.props.data.cid,
+                email: this.props.data.email,
+                mob: this.props.data.mob
             });
-            console.log(this.state.data)
-
-        }).catch(e => console.log(e));
     }
     contactInfoHandler = () => {
         if (this.state.update_contact_info === true)
@@ -43,13 +37,11 @@ class ContactInfo extends React.Component {
         })
     }
     updateInfo = (e) => {
-        
         e.preventDefault();
         let data = this.state;
-        data.sid = this.props.id;
+        data.cid = this.props.data.cid;
         console.log(this.state);
-        axios.post("http://localhost:3001/UpdateContactInfo", data).then(res => console.log(res.data));
-        
+        axios.post("http://localhost:3001/UpdateCompanyContactInfo", data).then(res => console.log(res.data));
         this.contactInfoHandler();
     }
 
@@ -80,11 +72,4 @@ class ContactInfo extends React.Component {
         </div>
     }
 }
-const mapStateToProps = state => {
-
-    return { 
-        id: state.rootReducer.id,
-        type: state.rootReducer.type
-    };
-  };
-  export default connect(mapStateToProps)(ContactInfo);
+export default CContactInfo;

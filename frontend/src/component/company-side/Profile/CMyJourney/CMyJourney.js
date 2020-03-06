@@ -1,28 +1,23 @@
 import React from 'react';
 import axios from 'axios';
-import {connect} from 'react-redux';
-class MyJourney extends React.Component {
+
+class CMyJourney extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             update_journey: false,
-            data: '',
             objective: ''
         }
         this.myJourneyHandler = this.myJourneyHandler.bind(this);
         this.educationChangeHandler = this.educationChangeHandler.bind(this);
         this.updateInfo = this.updateInfo.bind(this);
     }
-    async componentDidMount() {
-        let data = { sid: this.props.id , call : 'myJourney' }
-        await axios.post("http://localhost:3001/studentData", data).then(res => {
+    componentDidMount() {
             this.setState({
-                data: res.data[0],
-                objective: res.data[0].objective
+                cid: this.props.data.cid,
+                objective: this.props.data.description
             });
             console.log(this.state.data)
-
-        }).catch(e => console.log(e));
         // alert(this.props.id)
     }
     myJourneyHandler = () => {
@@ -44,9 +39,9 @@ class MyJourney extends React.Component {
     updateInfo = (e) => {
         e.preventDefault();
         let data = this.state;
-        data.sid = this.props.id;
+        data.cid = this.props.data.cid;
         console.log(this.state);
-        axios.post("http://localhost:3001/UpdateJourney", data).then(res => console.log(res.data));
+        axios.post("http://localhost:3001/UpdateCompanyJourney", data).then(res => console.log(res.data));
         // this.props.action();
         this.myJourneyHandler();
     }
@@ -75,11 +70,4 @@ class MyJourney extends React.Component {
         </div>
     }
 }
-const mapStateToProps = state => {
-
-    return { 
-        id: state.rootReducer.id,
-        type: state.rootReducer.type
-    };
-  };
-  export default connect(mapStateToProps)(MyJourney);
+export default CMyJourney;

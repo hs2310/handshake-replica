@@ -37,15 +37,15 @@ class Profile extends React.Component {
     // e.preventDefault();
     console.log("ID:"+JSON.stringify(store.getState()))
       let data = {
-        id: this.props.id
+        sid: this.props.id
       }
-      axios.post("http://localhost:3001/studentData", data).then(res => {
-        this.setState({
-          data: res.data[0]
-        });
-        console.log(this.state.data)
+      // axios.post("http://localhost:3001/studentData", data).then(res => {
+      //   this.setState({
+      //     data: res.data[0]
+      //   });
+      //   console.log(this.state.data)
         
-      }).catch(e => console.log(e));
+      // }).catch(e => console.log(e));
       axios.post("http://localhost:3001/studentSkills", data).then(res => {
         this.setState({
           skills : res.data[0]
