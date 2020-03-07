@@ -1,15 +1,26 @@
 import React from 'react';
 import Jobs from '../../Jobs/Jobs';
 import axios from 'axios';
+
 class CJobSearch extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             posted_jobs: [],
             toggle_post: false,
-            displayJobs: ''
+            displayJobs: '',
+            title: '',
+            posting_date: '',
+            deadline: '',
+            location: '',
+            salary: '',
+            job_description: '',
+            job_category: ''
         }
         this.toggle = this.toggle.bind(this)
+        this.display = this.display.bind(this)
+        this.changeHandler = this.changeHandler.bind(this)
+        this.postJob = this.postJob.bind(this)
     }
     async componentDidMount() {
         let data = {
@@ -41,6 +52,35 @@ class CJobSearch extends React.Component {
                 toggle_post: true
             })
     }
+    changeHandler = e => {
+        this.setState({
+            [e.target.name]: e.target.value
+        })
+    }
+    postJob = async (e) => {
+        e.preventDefault();
+        let data = {
+            cid: localStorage.getItem('id'),
+            title: this.state.title,
+            posting_date: this.state.posting_date,
+            deadline: this.state.deadline,
+            location: this.state.location,
+            salary: this.state.salary,
+            job_description: this.state.job_description,
+            job_category: this.state.job_category
+        }
+        console.log(data)
+        await axios.post("http://localhost:3001/postJob", data).then(res => {
+            console.log(res.data)
+        })
+        await axios.post("http://localhost:3001/getPostedJobs", data).then(r => {
+            this.setState({
+                posted_jobs: r.data
+            })
+            console.log(this.state.posted_jobs)
+        })
+        this.toggle()
+    }
     render() {
         let displayJobs = this.state.displayJobs;
         let postJob = null;
@@ -60,7 +100,7 @@ class CJobSearch extends React.Component {
                     <div className="card">
                         <div className="card-body">
                             <h4>Post a Job</h4>
-                            <form>
+                            <form onSubmit={this.postJob}>
                                 <div className="form-group">
                                     <input type="text" name="title" onChange={this.changeHandler} placeholder="Job Title" className="form-control" />
                                 </div>
@@ -77,7 +117,7 @@ class CJobSearch extends React.Component {
                                     <input type="number" name="salary" onChange={this.changeHandler} placeholder="Salary per annum" className="form-control" />
                                 </div>
                                 <div className="form-group">
-                                    <textarea className="form-control" name="job_description" placeholder="Job description"></textarea>
+                                    <textarea className="form-control" name="job_description" placeholder="Job description" onChange={this.changeHandler}></textarea>
                                 </div>
                                 <div className="form-group">
                                     <input type="text" name="job_category" onChange={this.changeHandler} placeholder="Job Category" className="form-control" />

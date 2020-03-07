@@ -716,5 +716,76 @@ app.post("/getPostedJobs" , (req,res) =>{
         // console.log(r);
     }) 
 })
+app.post("/postJob" , (req,res) =>{
+    console.log(req.body)
+    async function updateInfo() {
+        const mysql = require('mysql2/promise');
+        const conn = await mysql.createConnection({ host: 'localhost', user: 'root', database: 'handshake' });
+        const [error, results] = await conn.query('INSERT INTO `job_list` (`title`, `posting_date`, `deadline`, `location`, `salary`, `job_description`, `job_category`, `cid`) VALUES (?,?,?,?,?,?,?,?);', [req.body.title, req.body.posting_date, req.body.deadline, req.body.location,req.body.salary,req.body.job_description , req.body.job_category, Number(req.body.cid)]);
+
+        await conn.end();
+        // return Object.assign({}, rows);
+        if (error) {
+            return error
+        }
+        else {
+            // console.log(results)
+            return "Updated";
+        }
+    }
+
+    data = updateInfo()
+    data.then((r) => {
+        res.send(r);
+        // console.log(r);
+    }) 
+})
+app.post("/getAllApplications" , (req,res) => {
+    console.log(req.body)
+    async function updateInfo() {
+        const mysql = require('mysql2/promise');
+        const conn = await mysql.createConnection({ host: 'localhost', user: 'root', database: 'handshake' });
+        const [error, results] = await conn.query('SELECT `students`.* , `job_applied`.`jid`,`job_applied`.`status`,`job_applied`.`resume_url` FROM `students` INNER JOIN `job_applied` ON (`students`.`sid` = `job_applied`.`sid` AND `job_applied`.`jid` = ?)', [Number(req.body.jid)]);
+
+        await conn.end();
+        // return Object.assign({}, rows);
+        if (error) {
+            return error
+        }
+        else {
+            // console.log(results)
+            return rows;
+        }
+    }
+
+    data = updateInfo()
+    data.then((r) => {
+        res.send(r);
+        // console.log(r);
+    })   
+})
+app.post("/updateStatus", (req,res) => {
+    async function updateInfo() {
+        const mysql = require('mysql2/promise');
+        const conn = await mysql.createConnection({ host: 'localhost', user: 'root', database: 'handshake' });
+        const [error, results] = await conn.query('UPDATE `job_applied` SET status = ? WHERE jid = ? AND sid = ?;', [req.body.status, req.body.jid, req.body.sid]);
+
+        await conn.end();
+        // return Object.assign({}, rows);
+        if (error) {
+            return error
+        }
+        else {
+            // console.log(results)
+            return results;
+        }
+    }
+
+    data = updateInfo()
+    data.then((r) => {
+        res.send(r);
+        // console.log(r);
+    })
+})
 app.listen(3001);
 console.log("Server Listening on port 3001"); 

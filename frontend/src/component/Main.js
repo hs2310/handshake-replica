@@ -17,6 +17,7 @@ import StudentDetails from './StudentDetails/StudentDetails';
 import StudentProfile from './StudentProfile/StudentProfile';
 import CProfile from './company-side/Profile/Profile';
 import CJobSearch from './company-side/CJobSearch/CJobSearch';
+import CStudentApplications from './company-side/CStudentApplications/CStudentApplications';
 //Main Component
 class Main extends Component {
   render() {
@@ -34,7 +35,13 @@ class Main extends Component {
             return <JobSearch />    
         }}/>
         <Route path="/nav" component={Home}/>
-        <Route path="/jobs" component={JobSearch}/>
+        {/* <Route path="/jobs" component={JobSearch}/> */}
+        <Route path="/jobs" render={ () => {
+          if(localStorage.getItem('type') === 'company')
+            return <CJobSearch />
+          else
+            return <JobSearch />    
+        }}/>
         <Route path="/profile" render={ () => {
           if(localStorage.getItem('type') === 'company')
             return <CProfile />
@@ -51,7 +58,13 @@ class Main extends Component {
         }}/>
         <Route path = "/displayCompany/:id" component={CompanyProfile} />
         <Route path = "/displayStudent/:id" component={StudentProfile} />
-        <Route path = "/studentApplications" component={StudentApplication} />
+        {/* <Route path = "/studentApplications" component={StudentApplication} /> */}
+        <Route path="/studentApplications" render={ () => {
+          if(localStorage.getItem('type') === 'company')
+            return <CStudentApplications />
+          else
+            return <StudentApplication />    
+        }}/>
         <Route path = "/students" component = {StudentDetails} />
         {/* <DisplayCompany/>
         </Route> */}
