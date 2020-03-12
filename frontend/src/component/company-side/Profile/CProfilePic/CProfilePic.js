@@ -81,7 +81,7 @@ class CProfilePic extends React.Component {
       </div>
     }
     else {
-      generalInfo = <div><img src={this.state.profile_pic} className="img-circle" width="100px" height="100px" alt="Not Uploaded!!!" />
+      generalInfo = <div><img src={this.state.profile_pic} className="rounded-circle" width="100px" height="100px" alt="Not Uploaded!!!" />
         </div>;
     }
     return <div>

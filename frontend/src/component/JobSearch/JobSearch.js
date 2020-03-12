@@ -8,14 +8,16 @@ import { getJobs } from '../../js/actions/job-action';
 import { connect } from 'react-redux';
 import ApplicationForm from './ApplicationForm';
 import Jobs from '../Jobs/Jobs';
+import axios from 'axios';
 class JobSearch extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
       msg: false,
       displayJobs: {},
-      apply: false
+      apply: ''
     }
+    this.checkApplied = this.checkApplied.bind(this)
   }
   async componentDidMount() {
     await this.props.getJobs();
@@ -27,7 +29,20 @@ class JobSearch extends React.Component {
   display(i) {
     console.log(i)
     this.setState({
+      apply : '',
       displayJobs: { ...this.props.jobs[i] }
+    })
+  }
+  checkApplied(jid){
+    
+    let data = {
+      jid : jid,
+      sid :  localStorage.getItem('id')
+    }
+    axios.post("http://localhost:3001/checkapplied", data).then(res => {
+      this.setState({
+        apply : res.data
+      })
     })
   }
   render() {
@@ -45,20 +60,12 @@ class JobSearch extends React.Component {
       </div>
 
     ))
-    if (this.state.apply)
+    if (this.state.apply === true)
       applyForm = <ApplicationForm jobs={displayJobs} />
+    else if(this.state.apply === false)
+      applyForm = <div className="alert alert-primary">Already Applied!!</div>
     return <div>
-      {/* <Navigate />
-      <nav className="navbar navbar-expand-sm bg-light navbar-light">
-        <ul className="navbar-nav">
-          <li className="nav-item active">
-            <Link className="nav-link" to="/jobSearch">Job Search</Link>
-          </li>
-          <li className="nav-item active">
-            <Link className="nav-link" to="#">Applications</Link>
-          </li>
-        </ul>
-      </nav> */}
+      
       <Jobs />
       <div>
         <div className="container">
@@ -81,7 +88,7 @@ class JobSearch extends React.Component {
                   <p className="card-text">{displayJobs.location}</p>
                   <p className="card-text">{displayJobs.job_category}</p>
                   <p className="card-text">{displayJobs.job_description}</p>
-                  <button type="button" onClick={() => { this.setState({ apply: true }) }} className="btn btn-primary">Apply</button>
+                  <button type="button" onClick={() => this.checkApplied(displayJobs.jid)} className="btn btn-primary">Apply</button>
                   {applyForm}
                 </div>
               </div>
