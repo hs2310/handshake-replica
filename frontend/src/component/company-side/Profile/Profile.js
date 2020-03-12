@@ -7,6 +7,7 @@ import {Redirect} from 'react-router';
 import CGeneralInfo from './CGeneralInfo/CGeneralInfo';
 import CContactInfo from './CContactInfo/CContactInfo';
 import CMyJourney from './CMyJourney/CMyJourney';
+// import CProfilePic from './CProfilePic/CProfilePic';
 class CProfile extends React.Component {
     constructor(props) {
         super(props);
@@ -33,12 +34,13 @@ class CProfile extends React.Component {
         let generalInfo = null;
         let contactInfo = null;
         let myJourney = null;
-
+        // let profilepic = null;
         if(this.state.Info)
         {    
             generalInfo = <CGeneralInfo data ={this.state.data}/> 
             contactInfo = <CContactInfo data = {this.state.data} />
             myJourney = <CMyJourney data = {this.state.data} />
+            // profilepic = <CProfilePic data = {this.state.data} />
         }
         if (!cookie.load('cookie')) {
             return <Redirect to="/" />
@@ -52,6 +54,7 @@ class CProfile extends React.Component {
                             {generalInfo}
                         </Col>
                         <Col sm={{ span: 7, offset: 1 }} style={style_box}>
+                            {/* {profilepic} */}
                             {myJourney}
                         </Col>
                     </Row>

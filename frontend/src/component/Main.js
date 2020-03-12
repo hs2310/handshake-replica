@@ -18,6 +18,10 @@ import StudentProfile from './StudentProfile/StudentProfile';
 import CProfile from './company-side/Profile/Profile';
 import CJobSearch from './company-side/CJobSearch/CJobSearch';
 import CStudentApplications from './company-side/CStudentApplications/CStudentApplications';
+import Events from './Event/Event';
+import CEvents from './company-side/CEvents/CEvents';
+import EventApplications from './EventApplications/EventApplications';
+import CEventApplications from './company-side/CEventApplications/CEventApplications';
 //Main Component
 class Main extends Component {
   render() {
@@ -65,7 +69,25 @@ class Main extends Component {
           else
             return <StudentApplication />    
         }}/>
+        <Route path="/studentApplications" render={ () => {
+          if(localStorage.getItem('type') === 'company')
+            return <CStudentApplications />
+          else
+            return <StudentApplication />    
+        }}/>
         <Route path = "/students" component = {StudentDetails} />
+        <Route path="/events" render={ () => {
+          if(localStorage.getItem('type') === 'company')
+            return <CEvents />
+          else
+            return <Events />    
+        }}/>
+        <Route path="/EventApplication" render={ () => {
+          if(localStorage.getItem('type') === 'company')
+            return <CEventApplications />
+          else
+            return <EventApplications />    
+        }}/>
         {/* <DisplayCompany/>
         </Route> */}
         {/* <Route path="/home" component={Home}/>

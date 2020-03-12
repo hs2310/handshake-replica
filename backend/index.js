@@ -787,5 +787,228 @@ app.post("/updateStatus", (req,res) => {
         // console.log(r);
     })
 })
+app.post('/getPostedEvents', (req,res) => {
+    console.log(req.body)
+    async function updateInfo() {
+        const mysql = require('mysql2/promise');
+        const conn = await mysql.createConnection({ host: 'localhost', user: 'root', database: 'handshake' });
+        const [error, results] = await conn.query('SELECT * FROM `event_list` WHERE cid = ?;', [Number(req.body.cid)]);
+
+        await conn.end();
+        // return Object.assign({}, rows);
+        if (error) {
+            return error
+        }
+        else {
+            // console.log(results)
+            return "Updated";
+        }
+    }
+    data = updateInfo()
+    data.then((r) => {
+        res.send(r);
+        // console.log(r);
+    })   
+})
+app.post("/postEvent" , (req,res) =>{
+    console.log(req.body)
+    async function updateInfo() {
+        const mysql = require('mysql2/promise');
+        const conn = await mysql.createConnection({ host: 'localhost', user: 'root', database: 'handshake' });
+        const [error, results] = await conn.query('INSERT INTO `event_list` (`cid`, `name`, `description`, `time`, `date`, `location`, `eligibility`) VALUES (?,?,?,?,?,?,?);', [req.body.cid, req.body.name, req.body.description, req.body.time,req.body.date,req.body.location , req.body.eligibility]);
+
+        await conn.end();
+        // return Object.assign({}, rows);
+        if (error) {
+            return error
+        }
+        else {
+            // console.log(results)
+            return "Updated";
+        }
+    }
+
+    data = updateInfo()
+    data.then((r) => {
+        res.send(r);
+        // console.log(r);
+    }) 
+})
+app.post('/getEvents', (req,res) => {
+    console.log(req.body)
+    async function updateInfo() {
+        const mysql = require('mysql2/promise');
+        const conn = await mysql.createConnection({ host: 'localhost', user: 'root', database: 'handshake' });
+        const [error, results] = await conn.query('SELECT * FROM `event_list`;', [Number(req.body.cid)]);
+
+        await conn.end();
+        // return Object.assign({}, rows);
+        if (error) {
+            return error
+        }
+        else {
+            // console.log(results)
+            return "Updated";
+        }
+    }
+    data = updateInfo()
+    data.then((r) => {
+        res.send(r);
+        // console.log(r);
+    })   
+})
+app.post("/registerEvent" , (req,res) => {
+    console.log(req.body)
+    async function updateInfo() {
+        let exist = null;
+        const mysql = require('mysql2/promise');
+        const conn = await mysql.createConnection({ host: 'localhost', user: 'root', database: 'handshake' });
+        const [rows, fields] = await conn.query('SELECT * FROM `event_applied` WHERE sid = ? AND eid = ?;', [Number(req.body.sid) , Number(req.body.eid)]);
+        if(rows.length > 0){
+            console.log(rows)
+            exist =  "Applied Already !!!!"
+        }
+        else{
+            const [err, result] = await conn.query('INSERT INTO `event_applied` (`eid`, `sid`) VALUES (?,?);', [Number(req.body.eid), Number(req.body.sid)]);
+            exist = "Applied !!!!"            
+        }
+        await conn.end();
+        return exist
+        // return Object.assign({}, rows);
+        // if (error) {
+        //     return error
+        // }
+        // else {
+        //     // console.log(results)
+        //     return "Updated";
+        // }
+    }
+    data = updateInfo()
+    data.then((r) => {
+        res.send(r);
+        // console.log(r);
+    })   
+})
+app.post("/getAppliedEvents" , (req,res) => {
+    async function updateInfo() {
+        const mysql = require('mysql2/promise');
+        const conn = await mysql.createConnection({ host: 'localhost', user: 'root', database: 'handshake' });
+        const [rows, fields] = await conn.query('SELECT `event_list`.* FROM `event_list` INNER JOIN `event_applied` ON (`event_list`.`eid` = `event_applied`.`eid` AND `event_applied`.`sid` = ? );', [Number(req.body.sid)]);
+
+        await conn.end();
+        // return Object.assign({}, rows);
+        // if (error) {
+        //     return error
+        // }
+        // else {
+            // console.log(results)
+            return rows;
+        // }
+    }
+    data = updateInfo()
+    data.then((r) => {
+        res.send(r);
+        // console.log(r);
+    }) 
+})
+app.post("/getEventStudents" , (req,res) =>{
+    req.send("uploaded")
+})
+// app.post('/company-profile_pic ', upload.single('file') , (req,res) =>{
+//     // console.log(req.file)
+//     // console.log(req.hostname)
+    
+//     // console.log(filepath)
+
+//     // res.send(filepath)
+//     console.log("CALLED COMPANy")
+//     async function updateInfo() {
+//         const mysql = require('mysql2/promise');
+//         const conn = await mysql.createConnection({ host: 'localhost', user: 'root', database: 'handshake' });
+//         const filepath = "http://" + req.hostname + ":3001/" + req.file.destination +"/"+req.file.filename ;
+//         const [error, results] = await conn.query('UPDATE `company` SET profile_pic = ? WHERE cid = ?;', [filepath, req.body.cid]);
+
+//         await conn.end();
+//         // return Object.assign({}, rows);
+//         if (error) {
+//             return error
+//         }
+//         else {
+//             // console.log(results)
+//             return filepath;
+//         }
+//     }
+
+//     data = updateInfo()
+//     data.then((r) => {
+//         res.send(r);
+//         // console.log(r);
+//     }) 
+// } )
+
+app.post('/student_profile_pic', upload.single('file') , (req,res) =>{
+    // console.log(req.file)
+    // console.log(req.hostname)
+    
+    // console.log(filepath)
+
+    // res.send(filepath)
+    async function updateInfo() {
+        const mysql = require('mysql2/promise');
+        const conn = await mysql.createConnection({ host: 'localhost', user: 'root', database: 'handshake' });
+        const filepath = "http://" + req.hostname + ":3001/" + req.file.destination +req.file.filename ;
+        const [error, results] = await conn.query('UPDATE `students` SET profile_pic = ? WHERE sid = ?;', [filepath, req.body.sid]);
+
+        await conn.end();
+        // return Object.assign({}, rows);
+        if (error) {
+            return error
+        }
+        else {
+            // console.log(results)
+            return filepath;
+        }
+    }
+
+    data = updateInfo()
+    data.then((r) => {
+        res.send(r);
+        // console.log(r);
+    }) 
+} )
+app.post('/company_profile_pic', upload.single('file') , (req,res) =>{
+    // console.log(req.file)
+    // console.log(req.hostname)
+    
+    // console.log(filepath)
+
+    // res.send(filepath)
+    async function updateInfo() {
+        const mysql = require('mysql2/promise');
+        const conn = await mysql.createConnection({ host: 'localhost', user: 'root', database: 'handshake' });
+        const filepath = "http://" + req.hostname + ":3001/" + req.file.destination +req.file.filename ;
+        const [result, error] = await conn.query('UPDATE `company` SET profile_pic = ? WHERE cid = ?;', [filepath, req.body.cid]);
+
+        await conn.end();
+        // return Object.assign({}, rows);
+        if (result) {
+            return filepath
+        }
+        else {
+            // console.log(results)
+            return error;
+        }
+    }
+
+    data = updateInfo()
+    data.then((r) => {
+        res.send(r);
+        // console.log(r);
+    }) 
+} )
+
+app.post("/hi",(req,res) => {
+    res.send("hi")
+})
 app.listen(3001);
 console.log("Server Listening on port 3001"); 

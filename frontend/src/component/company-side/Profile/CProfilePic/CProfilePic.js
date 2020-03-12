@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 
-class ProfilePic extends React.Component {
+class CProfilePic extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -14,9 +14,9 @@ class ProfilePic extends React.Component {
     this.educationChangeHandler = this.educationChangeHandler.bind(this);
     this.updateInfo = this.updateInfo.bind(this);
   }
-  componentDidMount() {
-    let data = { sid: localStorage.getItem('id'), call: "profile pic" }
-    axios.post("http://localhost:3001/studentData", data).then(res => {
+  async componentDidMount() {
+    let data = { cid: localStorage.getItem('id'), call: "profile pic" }
+    await axios.post("http://localhost:3001/getCompanyDetails", data).then(res => {
       this.setState({
         data: res.data[0],
         profile_pic: res.data[0].profile_pic,
@@ -43,16 +43,13 @@ class ProfilePic extends React.Component {
   }
   updateInfo = async (e) => {
     e.preventDefault();
-    // let data = this.state;
-    // data.sid = '1';
-    // console.log(this.state);
-    // axios.post("http://localhost:3001/UpdateInfo", data).then(res => alert(res.data));
-    // this.props.action();
+    
     let formData = new FormData();
     formData.append('file', this.state.profile_pic);
-    formData.append('sid' , localStorage.getItem('id'));
+    formData.append('cid' , localStorage.getItem('id'));
+    console.log(formData.get('file'))
     
-    axios.post('http://localhost:3001/student_profile_pic',
+    axios.post("http://localhost:3001/company_profile_pic",
       formData,
       {
         headers: {
@@ -63,7 +60,7 @@ class ProfilePic extends React.Component {
       this.setState({
         profile_pic : res.data
       })
-      console.log('SUCCESS!!');
+      console.log(res.data);
     })
       .catch(function () {
         console.log('FAILURE!!');
@@ -93,4 +90,4 @@ class ProfilePic extends React.Component {
     </div>
   }
 }
-export default ProfilePic;
+export default CProfilePic;

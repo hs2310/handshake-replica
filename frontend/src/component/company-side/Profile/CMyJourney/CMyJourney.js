@@ -17,7 +17,7 @@ class CMyJourney extends React.Component {
                 cid: this.props.data.cid,
                 objective: this.props.data.description
             });
-            console.log(this.state.data)
+            
         // alert(this.props.id)
     }
     myJourneyHandler = () => {

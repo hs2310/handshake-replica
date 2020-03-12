@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import {connect} from 'react-redux';
+import ProfilePic from '../ProfilePic/ProfilePic';
 class GeneralInfo extends React.Component {
     constructor(props) {
         super(props);
@@ -17,7 +18,7 @@ class GeneralInfo extends React.Component {
         this.updateInfo = this.updateInfo.bind(this);
     }
     async componentDidMount (){
-      let data ={sid : this.props.id , call : "generaliInfo"}
+      let data ={sid : this.props.id , call : "generalInfo"}
       await axios.post("http://localhost:3001/studentData", data).then(res => {
       this.setState({
         data: res.data[0],
@@ -60,10 +61,11 @@ class GeneralInfo extends React.Component {
       let generalInfo =null;
       if (this.state.update_general_info === true) {
         generalInfo = <div>
+          
           <form onSubmit={this.updateInfo}>
-            <div className="form-group">
+            {/* <div className="form-group">
               <input type="file" name="profile_pic" className = "form-control" onChange={this.educationChangeHandler} />
-            </div>
+            </div> */}
             <div className="form-group">
               <input type="text" name="name" placeholder="Enter your Name" className="form-control" defaultValue={this.state.name} onChange={this.educationChangeHandler}/>
             </div>
@@ -83,13 +85,14 @@ class GeneralInfo extends React.Component {
         </div>
       }
       else {
-        generalInfo = <div>{this.state.profile_pic}<h4>{this.state.name}</h4>{this.state.college}<br />{this.state.dob}</div>;
+        generalInfo = <div><h4>{this.state.name}</h4>{this.state.college}<br />{this.state.dob}</div>;
       }  
         return <div>
             <button onClick={this.generalInfoHandler} className="btn btn-primary" style={{ float: "right" }} type="button">edit</button>
 
             <h4>General Information</h4>
-
+            <br/>
+            <ProfilePic /> 
             {generalInfo}
         </div>
     }
