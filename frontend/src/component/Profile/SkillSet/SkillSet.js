@@ -89,14 +89,14 @@ class SkillSet extends React.Component {
         }
     }
     deleteSkill = (id) => {
-        let data = { "id": id }
+        let data = { id: id }
         axios.post("http://54.86.64.9:3001/DeleteSkill", data).then(res => {
             axios.post("http://54.86.64.9:3001/studentSkills", data).then(res => {
-                    this.setState({
-                        skillSet: res.data,
-                    });
-                    // console.log(this.state.skillSet)
-                })
+                this.setState({
+                    skillSet: res.data,
+                });
+                // console.log(this.state.skillSet)
+            })
         });
         this.update();
         // this.props.action();
