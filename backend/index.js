@@ -113,7 +113,7 @@ app.post('/company-signup', function (req, res) {
 
 app.post('/login', function (req, res) {
     let table = null;
-    console.log("Inside Login Post Request");
+    console.log("Inside Login Post Request" , req.body);
 
     console.log("Req Body : ", req.body.email);
     if (req.body.company === false)
@@ -1057,8 +1057,27 @@ app.post('/company_profile_pic', upload.single('file'), (req, res) => {
     })
 })
 
-app.post("/hi", (req, res) => {
-    res.send("hi")
+app.post("/getMajor", (req, res) => {
+    async function updateInfo() {
+        const mysql = require('mysql2/promise');
+        const conn = await mysql.createConnection({ host: 'localhost', user: 'root', database: 'handshake' });
+        const [rows, fields] = await conn.query('SELECT major FROM `education` INNER JOIN `students` ON (`students`.`sid` = `education`.`sid` AND `students`.`college` = `education`.`school_name` AND `students`.`sid` = ? );', [Number(req.body.sid)]);
+
+        await conn.end();
+        // return Object.assign({}, rows);
+        // if (error) {
+        //     return error
+        // }
+        // else {
+        // console.log(results)
+        return rows;
+        // }
+    }
+    data = updateInfo()
+    data.then((r) => {
+        res.send(r);
+        // console.log(r);
+    }) 
 })
 app.listen(3001);
 console.log("Server Listening on port 3001"); 

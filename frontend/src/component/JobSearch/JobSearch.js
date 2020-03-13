@@ -110,6 +110,8 @@ class JobSearch extends React.Component {
           this.SelectedFilterArray()
         })
         break;
+        default:
+          break;
     }
   }
 

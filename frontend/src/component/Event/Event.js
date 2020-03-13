@@ -37,17 +37,20 @@ class Events extends React.Component {
             sid: localStorage.getItem('id'),
             eid: eid
         }
-        if (eligibility === 'MS Software Engineering' || eligibility === 'All Majors') {
-            axios.post("http://localhost:3001/registerEvent", data).then(res => {
-                this.setState({
-                    applied: <div className="alert alert-primary" style={{ marginTop: '5%' }} >{res.data}</div>
+        axios.post('http://localhost:3001/getMajor', data).then(res => {
+            if (eligibility === res.data[0].major || eligibility === 'All Majors') {
+                axios.post("http://localhost:3001/registerEvent", data).then(res => {
+                    this.setState({
+                        applied: <div className="alert alert-primary" style={{ marginTop: '5%' }} >{res.data}</div>
+                    })
                 })
-            })
-        }
-        else
-            this.setState({
-                applied: <div className="alert alert-danger" style={{ marginTop: '5%' }} >Not Eligible !!!</div>
-            })
+            }
+            else
+                this.setState({
+                    applied: <div className="alert alert-danger" style={{ marginTop: '5%' }} >Not Eligible !!!</div>
+                })
+        })
+
     }
     jobSearch = (e) => {
         let filteredSearchJobs = this.state.posted_events;

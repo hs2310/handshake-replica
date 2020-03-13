@@ -151,8 +151,8 @@ class Register extends Component {
                             <select name="college" onChange={this.selecthandleChange} className="form-control">
                                 <option value=""></option>
                                 <option value="San Jose State University">San Jose State University</option>
-                                <option value="Santa Clara University">Santa Clara University</option>
-                                <option value="University of California Berkley">University of California Berkley</option>
+                                <option value="University of Hogwarts">University of Hogwarts</option>
+                                <option value="Standford University">Standford University</option>
                             </select>
                     </div>
                     <div className="form-group">

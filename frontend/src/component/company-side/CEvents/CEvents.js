@@ -37,7 +37,6 @@ class CEvents extends React.Component {
     }
     display(i) {
         console.log(i)
-        window.alert("hi")
         this.setState({
             displayJobs: { ...this.state.posted_events[i] }
         })
@@ -111,7 +110,7 @@ class CEvents extends React.Component {
                                     <textarea className="form-control" name="description" placeholder="Event Description" onChange={this.changeHandler}></textarea>
                                 </div>
                                 <div className="form-group">
-                                    <input type="time" name="time" onChange={this.changeHandler} placeholder="Time" className="form-control" />
+                                    <input type="text" name="time" onChange={this.changeHandler} placeholder="Time" className="form-control" />
                                 </div>
                                 <div className="form-group">
                                     <input type="text" name="date" onChange={this.changeHandler} placeholder="Date" className="form-control" />

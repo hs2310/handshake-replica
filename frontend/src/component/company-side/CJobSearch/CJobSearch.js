@@ -168,6 +168,8 @@ class CJobSearch extends React.Component {
                                 <h5 className="card-title">{displayJobs.title}</h5>
                                 <p className="card-text">Salary : {displayJobs.salary}$</p>
                                 <p className="card-text">Location : {displayJobs.location}</p>
+                                <p className="card-text">Posted On : {displayJobs.posting_date}</p>
+                                <p className="card-text">Deadline : {displayJobs.deadline}</p>
                                 <p className="card-text">Job Category : {displayJobs.job_category}</p>
                                 <p className="card-text">Description : {displayJobs.job_description}</p>
                             </div>
