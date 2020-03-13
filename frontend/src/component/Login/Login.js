@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 //import Main from './components/Main';
 // import {BrowserRouter} from 'react-router-dom';
 //import Register from './Register/Register';
-// import axios from 'axios';
+import axios from 'axios';
 import cookie from 'react-cookies';
 import { Redirect, Link } from 'react-router-dom';
-import { login } from '../../js/actions/index';
-import { connect } from 'react-redux';
+// import { login } from '../../js/actions/index';
+// import { connect } from 'react-redux';
 // import {bindActionCreators} from 'redux'
 //Define a Login Component
 class Login extends Component {
@@ -60,54 +60,54 @@ class Login extends Component {
             company: this.state.company
         }
         // //set the with credentials to true
-        // axios.defaults.withCredentials = true;
-        // //make a post request with the user data
-        // axios.post('http://54.86.64.9:3001/login', data)
-        //     .then(response => {
-        //         console.log("Status Code : ", response.status);
-        //         if (response.status === 200) {
-        //             this.setState({
-        //                 error: '',
-        //                 authFlag: true
-        //             })
+        axios.defaults.withCredentials = true;
+        //make a post request with the user data
+        axios.post('http://54.86.64.9:3001/login', data)
+            .then(response => {
+                console.log("Status Code : ", response.status);
+                if (response.status === 200) {
+                    this.setState({
+                        error: '',
+                        authFlag: true
+                    })
 
-        //             let payload ={
-        //                 id : response.data,
-        //                 type :''
-        //             }
+                    let payload ={
+                        id : response.data,
+                        type :''
+                    }
 
-        //             if (this.state.company === false){
-        //                 localStorage.setItem('type', 'students');
-        //                 payload.type = 'students';
-        //             }
-        //             else if (this.state.company === true){
-        //                 localStorage.setItem('type', 'college');
-        //                 payload.type = 'company';
-        //             }
-        console.log(this.props.authFlag);
-        await this.props.login(data)
-        console.log("ACTION" + this.props.authFlag);
+                    if (this.state.company === false){
+                        localStorage.setItem('type', 'students');
+                        payload.type = 'students';
+                    }
+                    else if (this.state.company === true){
+                        localStorage.setItem('type', 'college');
+                        payload.type = 'company';
+                    }
+        // console.log(this.props.authFlag);
+        // await this.props.login(data)
+        // console.log("ACTION" + this.props.authFlag);
 
 
         
-        // }
-        // }).catch(e => {
-        //     console.log(e);
-        //     this.setState({
-        //         error: <div className="alert alert-danger" style={{ marginTop: '5%' }}>Invalid Credentials!!</div>,
-        //         authFlag: false
-        //     });
-        // });
+        }
+        }).catch(e => {
+            console.log(e);
+            this.setState({
+                error: <div className="alert alert-danger" style={{ marginTop: '5%' }}>Invalid Credentials!!</div>,
+                authFlag: false
+            });
+        });
     }
     render() {
         
         let redirectVar = null;
-        if (this.props.authFlag) { redirectVar = <Redirect to="/home" /> }
+        // if (this.props.authFlag) { redirectVar = <Redirect to="/home" /> }
         let error = '';
-        // if (cookie.load("cookie")) {
-        //      redirectVar = <Redirect to="/home" />
-        // }
-        if ( this.props.error === '')
+        if (cookie.load("cookie")) {
+             redirectVar = <Redirect to="/home" />
+        }
+        if ( this.state.error === '')
             error ='';
         else {
             error = <div className="alert alert-danger">Invalid Credentials</div>
@@ -183,20 +183,21 @@ class Login extends Component {
         }
     }
 }
-const mapStateToProps = state => {
-    return {
-        id: state.rootReducer.id,
-        type: state.rootReducer.type,
-        authFlag: state.rootReducer.authFlag,
-        error: state.rootReducer.error
-    };
-};
+// const mapStateToProps = state => {
+//     return {
+//         id: state.rootReducer.id,
+//         type: state.rootReducer.type,
+//         authFlag: state.rootReducer.authFlag,
+//         error: state.rootReducer.error
+//     };
+// };
 
-const mapDispatchToProps = dispatch => {
-    return {
-        login: rootReducer => dispatch(login(rootReducer))
-    };
-}
-export default connect(mapStateToProps, mapDispatchToProps)(Login);
+// const mapDispatchToProps = dispatch => {
+//     return {
+//         login: rootReducer => dispatch(login(rootReducer))
+//     };
+// }
+// export default connect(mapStateToProps, mapDispatchToProps)(Login);
+export default Login;
 
 

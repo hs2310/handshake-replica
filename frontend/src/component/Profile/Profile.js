@@ -10,7 +10,7 @@ import GeneralInfo from './GeneralInfo/GeneralInfo';
 import ContactInfo from './ContactInfo/ContactInfo'
 import MyJourney from './MyJourney/MyJourney';
 import SkillSet from './SkillSet/SkillSet';
-import {connect} from 'react-redux';
+// import {connect} from 'react-redux';
 import store from '../../js/store/index';
 import {getStudentData} from '../../js/actions/profile-action'
 // import {rootReducer} from '../../js/reducers/index'
@@ -37,7 +37,7 @@ class Profile extends React.Component {
     // e.preventDefault();
     console.log("ID:"+JSON.stringify(store.getState()))
       let data = {
-        sid: this.props.id
+        sid: localStorage.getItem('id')
       }
       // axios.post("http://54.86.64.9:3001/studentData", data).then(res => {
       //   this.setState({
@@ -127,21 +127,21 @@ class Profile extends React.Component {
   }
 }
 
-const mapStateToProps = state => {
+// const mapStateToProps = state => {
 
-  return { 
-      id: state.rootReducer.id,
-      data: state.profileReducer.data,
-      skills: state.profileReducer.skills,
-      skillSet:state.profileReducer.skillSet,
-      experience:state.profileReducer.experience,
-      education:state.profileReducer.education
-  };
-};
-const mapDispatchToProps = dispatch => {
-  return {
-      getStudentData: (rootReducer) => dispatch(getStudentData(rootReducer))
-  };
-}
-export default connect(mapStateToProps,mapDispatchToProps)(Profile);
-// export default Profile;
+//   return { 
+//       id: state.rootReducer.id,
+//       data: state.profileReducer.data,
+//       skills: state.profileReducer.skills,
+//       skillSet:state.profileReducer.skillSet,
+//       experience:state.profileReducer.experience,
+//       education:state.profileReducer.education
+//   };
+// };
+// const mapDispatchToProps = dispatch => {
+//   return {
+//       getStudentData: (rootReducer) => dispatch(getStudentData(rootReducer))
+//   };
+// }
+// export default connect(mapStateToProps,mapDispatchToProps)(Profile);
+export default Profile;
