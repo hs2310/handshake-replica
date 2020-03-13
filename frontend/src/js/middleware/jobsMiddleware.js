@@ -20,7 +20,7 @@ export function jobsMiddleware() {
                     // action.payload.mob= res.data[0].mob;
                     // action.payload.profile_pic=res.data[0].profile_pic
                     action.payload = res.data;
-                    console.log("JOBS MIDDLEWARE: "+ action.payload)
+                    // console.log("JOBS MIDDLEWARE: "+ action.payload)
                 })
                 // const res2 = axios.post("http://54.86.64.9:3001/studentSkills", action.payload.id)
                 // const res3 = axios.post("http://54.86.64.9:3001/studentEducation", action.payload.id)
