@@ -71,45 +71,32 @@ class Login extends Component {
                         authFlag: true
                     })
 
-                    // let payload ={
-                    //     id : response.data,
-                    //     type :''
-                    // }
-                    localStorage.setItem('id',response.data)
-                    if (this.state.company === false){
-                        localStorage.setItem('type', 'students');
-                        // payload.type = 'students';
-                    }
-                    else if (this.state.company === true){
+                    localStorage.setItem('id', response.data)
+                    if (this.state.company) {
                         localStorage.setItem('type', 'college');
-                        // payload.type = 'company';
                     }
-                    
-        // console.log(this.props.authFlag);
-        // await this.props.login(data)
-        // console.log("ACTION" + this.props.authFlag);
-
-
-        
-        }
-        }).catch(e => {
-            console.log(e);
-            this.setState({
-                error: <div className="alert alert-danger" style={{ marginTop: '5%' }}>Invalid Credentials!!</div>,
-                authFlag: false
+                    else {
+                        localStorage.setItem('type', 'student');
+                    }
+                }
+            }).catch(e => {
+                console.log(e);
+                this.setState({
+                    error: <div className="alert alert-danger" style={{ marginTop: '5%' }}>Invalid Credentials!!</div>,
+                    authFlag: false
+                });
             });
-        });
     }
     render() {
-        
+
         let redirectVar = null;
         // if (this.state.authFlag) { return <Redirect to="/home" /> }
         let error = '';
         if (localStorage.getItem('id')) {
-             redirectVar = <Redirect to="/home" />
+            redirectVar = <Redirect to="/home" />
         }
-        if ( this.state.error === '')
-            error ='';
+        if (this.state.error === '')
+            error = '';
         else {
             error = <div className="alert alert-danger">Invalid Credentials</div>
         }
@@ -117,7 +104,7 @@ class Login extends Component {
             return (
 
                 <div style={{ marginTop: "5%", marginLeft: "20%", marginRight: "20%" }}>
-                    
+
                     <div style={{ textAlign: "right", marginTop: "5%" }}>
                         No account? <Link to="/register">Sign Up Here</Link>
                     </div>
