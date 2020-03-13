@@ -71,19 +71,20 @@ class Login extends Component {
                         authFlag: true
                     })
 
-                    let payload ={
-                        id : response.data,
-                        type :''
-                    }
-
+                    // let payload ={
+                    //     id : response.data,
+                    //     type :''
+                    // }
+                    localStorage.setItem('id',response.data)
                     if (this.state.company === false){
                         localStorage.setItem('type', 'students');
-                        payload.type = 'students';
+                        // payload.type = 'students';
                     }
                     else if (this.state.company === true){
                         localStorage.setItem('type', 'college');
-                        payload.type = 'company';
+                        // payload.type = 'company';
                     }
+                    
         // console.log(this.props.authFlag);
         // await this.props.login(data)
         // console.log("ACTION" + this.props.authFlag);
@@ -102,7 +103,7 @@ class Login extends Component {
     render() {
         
         let redirectVar = null;
-        // if (this.props.authFlag) { redirectVar = <Redirect to="/home" /> }
+        if (this.props.authFlag) { redirectVar = <Redirect to="/home" /> }
         let error = '';
         if (cookie.load("cookie")) {
              redirectVar = <Redirect to="/home" />
