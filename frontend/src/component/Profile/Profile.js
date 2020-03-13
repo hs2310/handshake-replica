@@ -35,7 +35,7 @@ class Profile extends React.Component {
   }
   update =() => {
     // e.preventDefault();
-    console.log("ID:"+JSON.stringify(store.getState()))
+    // console.log("ID:"+JSON.stringify(store.getState()))
       let data = {
         sid: localStorage.getItem('id')
       }
