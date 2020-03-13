@@ -86,7 +86,7 @@ class Profile extends React.Component {
   render() {
     let style_box = { boxShadow: "1px 3px 5px grey", padding: "2%" };
     
-    if (!cookie.load('cookie')) {
+    if (!localStorage.getItem('id')) {
       return <Redirect to="/" />
     }
     else {

@@ -90,7 +90,7 @@ class Register extends Component {
             });
     }
     render() {
-        if (cookie.load("cookie")) {
+        if (localStorage.getItem('id')) {
             return <Redirect to="/home" />
         }
         return (

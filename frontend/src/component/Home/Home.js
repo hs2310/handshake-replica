@@ -12,7 +12,7 @@ class Home extends React.Component {
   // }
   render() {
 
-    if (!cookie.load('cookie')) {
+    if (!localStorage.getItem('id')) {
       return <Redirect to="/" />
     }
     else {

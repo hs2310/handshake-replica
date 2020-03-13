@@ -103,9 +103,9 @@ class Login extends Component {
     render() {
         
         let redirectVar = null;
-        if (this.state.authFlag) { redirectVar = <Redirect to="/home" /> }
+        // if (this.state.authFlag) { return <Redirect to="/home" /> }
         let error = '';
-        if (cookie.load("cookie")) {
+        if (localStorage.getItem('id')) {
              redirectVar = <Redirect to="/home" />
         }
         if ( this.state.error === '')

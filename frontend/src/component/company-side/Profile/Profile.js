@@ -42,7 +42,7 @@ class CProfile extends React.Component {
             myJourney = <CMyJourney data = {this.state.data} />
             // profilepic = <CProfilePic data = {this.state.data} />
         }
-        if (!cookie.load('cookie')) {
+        if (!localStorage.getItem('id')) {
             return <Redirect to="/" />
         }
         else {

@@ -16,7 +16,7 @@ class Navigate extends React.Component {
   }
   render() {
     let redirectVar = null;
-    if (!cookie.load('cookie')) {
+    if (!localStorage.getItem('id')) {
       return <Redirect to="/" />
     }
     else if (this.state.msg){
