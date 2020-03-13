@@ -10,6 +10,7 @@ class Logout extends React.Component {
 //   }
     componentDidMount(){
         cookie.remove("cookie",{path : '/'})
+        localStorage.removeItem('id')
         // this.props.logout();
     }
   render() {   
