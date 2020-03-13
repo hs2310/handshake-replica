@@ -32,13 +32,13 @@ class Main extends Component {
         {/*Render Different Component based on Route*/}
         <Switch>
         <Route exact path="/" component={Login}/>
-        {/* <Route path="/home" render={ () => {
+        <Route path="/home" render={ () => {
           if(localStorage.getItem('type') === 'company')
             return <CJobSearch />
           else
             return <JobSearch />    
-        }}/> */}
-        <Route path="/home" component={JobSearch} />
+        }}/>
+        {/* <Route path="/home" component={JobSearch} /> */}
         <Route path="/nav" component={Home}/>
         {/* <Route path="/jobs" component={JobSearch}/> */}
         <Route path="/jobs" render={ () => {
