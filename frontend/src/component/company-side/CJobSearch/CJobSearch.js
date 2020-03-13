@@ -57,6 +57,18 @@ class CJobSearch extends React.Component {
             [e.target.name]: e.target.value
         })
     }
+    // checkchangeHandler = e =>{
+    //     const options = this.state.job_category
+    //     let index
+    //     if(e.target.checked){
+    //         options.push(e.target.value)
+    //     } else {
+    //         // or remove the value from the unchecked checkbox from the array
+    //         index = options.indexOf(e.target.value)
+    //         options.splice(index, 1)
+    //       }
+    //       this.setState({ job_category: options })
+    // }
     postJob = async (e) => {
         e.preventDefault();
         let data = {
@@ -120,8 +132,14 @@ class CJobSearch extends React.Component {
                                     <textarea className="form-control" name="job_description" placeholder="Job description" onChange={this.changeHandler}></textarea>
                                 </div>
                                 <div className="form-group">
-                                    <input type="text" name="job_category" onChange={this.changeHandler} placeholder="Job Category" className="form-control" />
-                                </div>
+                                    <select onChange={this.changeHandler} name="job_category" className="form-control">
+                                        <option value=""></option>
+                                        <option value="FullTime">FullTime</option>
+                                        <option value="PartTime">PartTime</option>
+                                        <option value="Internship">Internship</option>
+                                        <option value="OnCampus">OnCampus</option>
+                                    </select>
+                               </div>
                                 <button className="btn btn-primary">Post a Job</button>
                             </form>
                         </div>
@@ -148,10 +166,10 @@ class CJobSearch extends React.Component {
                         <div className="card">
                             <div className="card-body">
                                 <h5 className="card-title">{displayJobs.title}</h5>
-                                <p className="card-text">{displayJobs.salary}</p>
-                                <p className="card-text">{displayJobs.location}</p>
-                                <p className="card-text">{displayJobs.job_category}</p>
-                                <p className="card-text">{displayJobs.job_description}</p>
+                                <p className="card-text">Salary : {displayJobs.salary}$</p>
+                                <p className="card-text">Location : {displayJobs.location}</p>
+                                <p className="card-text">Job Category : {displayJobs.job_category}</p>
+                                <p className="card-text">Description : {displayJobs.job_description}</p>
                             </div>
                         </div>
                     </div>

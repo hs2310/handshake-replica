@@ -78,12 +78,12 @@ class CStudentApplications extends React.Component {
                 <div className="card-body">
                     <h5 className="card-title"><Link to={"/displayStudent/" + this.state.applications[item].sid}>{this.state.applications[item].name}</Link></h5>
                     {/* <h6 className="card-subtitle mb-2 text-muted">{this.state.applications[item].resume_url}</h6> */}
-                    <a href = {this.state.applications[item].resume_url} target="_blank">Resume</a>
+                    <a href = {this.state.applications[item].resume_url} rel="noopener noreferrer" target="_blank">Resume</a>
                     <p className="card-text">{this.state.applications[item].status}</p>
                     <form onSubmit={e => this.onSubmit(e, this.state.applications[item].sid, this.state.applications[item].jid, item)}>
                         <input type="radio" name="status" value="PENDING" onChange={this.changeHandler} /><label>PENDING</label>
-                        <input type="radio" name="status" value="REJECTED" onChange={this.changeHandler} /><label>REJECTED</label>
-                        <input type="radio" name="status" value="APPROVED" onChange={this.changeHandler} /><label>APPROVED</label>
+                        <input type="radio" name="status" value="DECLINED" onChange={this.changeHandler} /><label>DECLINED</label>
+                        <input type="radio" name="status" value="REVIEWED" onChange={this.changeHandler} /><label>REVIEWED</label>
                         <div className="form-group">
                             <button className="btn btn-primary">Change Status</button>
                         </div>

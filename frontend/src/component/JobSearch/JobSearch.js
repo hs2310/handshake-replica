@@ -15,67 +15,237 @@ class JobSearch extends React.Component {
     this.state = {
       msg: false,
       displayJobs: {},
-      apply: ''
+      apply: '',
+      jobs: this.props.jobs,
+      filteredJobs: [],
+      appliedFilters: [],
+      fullTimeStatus: false,
+      partTimeStatus: false,
+      internshipStatus: false,
+      onCampusStatus: false,
     }
     this.checkApplied = this.checkApplied.bind(this)
+    this.changeStatusHandler = this.changeStatusHandler.bind(this)
+    this.SelectedFilterArray = this.SelectedFilterArray.bind(this)
+    this.jobSearch = this.jobSearch.bind(this)
   }
   async componentDidMount() {
     await this.props.getJobs();
     console.log("JOBS " + this.props.jobs);
     this.setState({
-      displayJobs: { ...this.props.jobs[0] }
+      filteredJobs : this.props.jobs,
+      jobs : this.props.jobs,
+      displayJobs: { ...this.state.jobs[0] }
+    })
+  }
+  filterClear = () => {
+    this.setState({
+      fullTimeStatus: false,
+      partTimeStatus: false,
+      onCampusStatus: false,
+      internshipStatus: false,
+      appliedFilters: [],
+      filteredJobs: this.state.jobs
     })
   }
   display(i) {
     console.log(i)
     this.setState({
-      apply : '',
-      displayJobs: { ...this.props.jobs[i] }
+      apply: '',
+      displayJobs: { ...this.state.filteredJobs[i] }
     })
   }
-  checkApplied(jid){
-    
+  checkApplied(jid) {
+
     let data = {
-      jid : jid,
-      sid :  localStorage.getItem('id')
+      jid: jid,
+      sid: localStorage.getItem('id')
     }
     axios.post("http://localhost:3001/checkapplied", data).then(res => {
       this.setState({
-        apply : res.data
+        apply: res.data
       })
     })
   }
+  // filter1handler = e => {
+  //   this.setState({
+  //     filter1: e.target.value
+  //   })
+  //   let data = {
+  //     filter: this.state.filter1
+  //   }
+  //   axios.post("http://localhost:3001/jobfilter1", data).then(res => {
+  //     this.setState({
+  //       jobs: res.data
+  //     })
+  //   })
+  // }
+  changeStatusHandler = (e) => {
+    switch (e) {
+      case "FullTime":
+        this.setState({
+          fullTimeStatus: !this.state.fullTimeStatus
+        }, () => {
+          this.SelectedFilterArray()
+        })
+        break;
+      case "PartTime":
+        this.setState({
+          partTimeStatus: !this.state.partTimeStatus
+        }, () => {
+          this.SelectedFilterArray()
+        })
+        break;
+      case "Internship":
+        this.setState({
+          internshipStatus: !this.state.internshipStatus
+        }, () => {
+          this.SelectedFilterArray()
+        })
+        break;
+      case "OnCampus":
+        this.setState({
+          onCampusStatus: !this.state.onCampusStatus
+        }, () => {
+          this.SelectedFilterArray()
+        })
+        break;
+    }
+  }
+
+
+  SelectedFilterArray = () => {
+    var filters = []
+    if (this.state.fullTimeStatus) {
+      filters.push("FullTime");
+    }
+    if (this.state.partTimeStatus) {
+      filters.push("PartTime");
+    }
+    if (this.state.internshipStatus) {
+      filters.push("Internship");
+    }
+    if (this.state.onCampusStatus) {
+      filters.push("OnCampus");
+    }
+
+    let tempJobs;
+    if (filters.length > 0) {
+      tempJobs = this.state.jobs.filter((job) => {
+        return (filters.includes(job.job_category))
+      }
+      )
+    }
+    else {
+      tempJobs = this.state.jobs;
+    }
+    this.setState({
+      appliedFilters: filters,
+      filteredJobs: tempJobs,
+      displayJobs: tempJobs[0]
+    })
+
+
+    return tempJobs;
+
+  }
+
+  jobSearch = (e) => {
+    let filteredSearchJobs = this.SelectedFilterArray();
+    if (e.target.value) {
+      this.setState({
+        filteredJobs: filteredSearchJobs.filter((job) => {
+          return (job.title.replace(/\s+/g, '').toLowerCase().includes(e.target.value.replace(/\s+/g, '').toLowerCase()) || job.name.replace(/\s+/g, '').toLowerCase().includes(e.target.value.replace(/\s+/g, '').toLowerCase()) || job.location.replace(/\s+/g, '').toLowerCase().includes(e.target.value.replace(/\s+/g, '').toLowerCase()))
+        }
+        )
+      })
+      if(this.state.filteredJobs.length > 0)
+      this.setState({
+        displayJobs : this.state.filteredJobs[0]
+      })
+      else
+      this.setState({
+        displayJobs : ''
+      })
+    }
+  }
+
   render() {
+    let clear = null
+    if (this.state.appliedFilters.length > 0) {
+      clear = <button onClick={() => { this.filterClear() }} className="btn">Clear All</button>
+    }
+    var gtJobs = null
+
+    console.log("inside else in student jobs", this.state.filteredJobs)
+
+    if (this.state.filteredJobs.length === 0) {
+      gtJobs = "No Jobs Available"
+    }
+    else {
+      gtJobs = Object.keys(this.state.filteredJobs).map((item, i) => {
+        return <div className="card" key={i} onClick={() => { this.display(item) }}>
+          <div className="card-body">
+            <h5 className="card-title">{this.state.filteredJobs[item].title}</h5>
+            <h6 className="card-subtitle mb-2 text-muted">{this.state.filteredJobs[item].name}</h6>
+            <p className="card-text">{this.state.filteredJobs[item].location}</p>
+            <p className="card-text">{this.state.filteredJobs[item].job_category}</p>
+          </div>
+        </div>
+
+      })
+    }
+
     let applyForm = null;
 
     let displayJobs = this.state.displayJobs;
-    let jobList = Object.keys(this.props.jobs).map((item, i) => (
-      <div className="card" key={i} onClick={() => { this.display(item) }}>
-        <div className="card-body">
-          <h5 className="card-title">{this.props.jobs[item].title}</h5>
-          <h6 className="card-subtitle mb-2 text-muted">{this.props.jobs[item].name}</h6>
-          <p className="card-text">{this.props.jobs[item].location}</p>
-          <p className="card-text">{this.props.jobs[item].job_category}</p>
-        </div>
-      </div>
+    // let jobList = Object.keys(this.state.jobs).map((item, i) => (
+    //   <div className="card" key={i} onClick={() => { this.display(item) }}>
+    //     <div className="card-body">
+    //       <h5 className="card-title">{this.props.jobs[item].title}</h5>
+    //       <h6 className="card-subtitle mb-2 text-muted">{this.props.jobs[item].name}</h6>
+    //       <p className="card-text">{this.props.jobs[item].location}</p>
+    //       <p className="card-text">{this.props.jobs[item].job_category}</p>
+    //     </div>
+    //   </div>
 
-    ))
+    // ))
     if (this.state.apply === true)
       applyForm = <ApplicationForm jobs={displayJobs} />
-    else if(this.state.apply === false)
+    else if (this.state.apply === false)
       applyForm = <div className="alert alert-primary">Already Applied!!</div>
     return <div>
-      
+
       <Jobs />
       <div>
         <div className="container">
           <div className="row">
-            <div className="col-md-6">Filter</div>
-            <div className="col-md-6">Filter</div>
+            <div className="col-md-6">
+              <form>
+              <i className="glyphicon glyphicon-search"></i>
+              <input  class="form-control" type="text" onChange={this.jobSearch} placeholder="Enter Job Title or Company Name " />
+              </form>
+            </div>
+            <div className="col-md-6">
+              <i className="glyphicon glyphicon-search"></i>
+              <input  class="form-control" type="text" onChange={this.jobSearch} placeholder="Enter Location" />
+            </div>
+          </div>
+          <div className="row">
+            <div className="col-md-12">
+              <div class="btn-group" role="group" style={{ alignItems: "center" }} >
+                <button type="button" ref="FT" className={this.state.fullTimeStatus ? 'btn btn-outline-colored' : 'btn btn-outline'} name="fullTime" onClick={() => { this.changeStatusHandler("FullTime") }}>Full Time</button>
+                <button type="button" ref="PT" className={this.state.partTimeStatus ? 'btn btn-outline-colored' : 'btn btn-outline'} name="partTime" onClick={() => { this.changeStatusHandler("PartTime") }}>Part Time</button>
+                <button type="button" ref="IT" className={this.state.internshipStatus ? 'btn btn-outline-colored' : 'btn btn-outline'} name="internship" onClick={() => { this.changeStatusHandler("Internship") }}>Internship</button>
+                <button type="button" ref="OC" className={this.state.onCampusStatus ? 'btn btn-outline-colored' : 'btn btn-outline'} name="onCampus" onClick={() => { this.changeStatusHandler("OnCampus") }}>On Campus</button>
+                {clear}
+              </div>
+
+            </div>
           </div>
           <div className="row">
             <div className="col-md-4">
-              {jobList}
+              {gtJobs}
             </div>
             <div className="col-md-8">
               <div className="card">
@@ -97,7 +267,7 @@ class JobSearch extends React.Component {
         </div>
 
       </div>
-    </div>
+    </div >
   }
 }
 const mapStateToProps = state => {

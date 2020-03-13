@@ -74,10 +74,11 @@ class Experience extends React.Component {
                         <input type="text" name="employer" placeholder="Enter Employer" className="form-control" onChange={this.experienceChangeHandler} />
                     </div>
                     <div className="form-group">
-                        <input type="date" name="start" placeholder="Enter Start Date" className="form-control" onChange={this.experienceChangeHandler} />
+                        <input type="text" name="start" placeholder="Enter Start Date" className="form-control" onChange={this.experienceChangeHandler} />
                     </div>
                     <div className="form-group">
-                        <input type="date" name="end" placeholder="Enter End Date" className="form-control" onChange={this.experienceChangeHandler} />
+                        <input type="text
+                        " name="end" placeholder="Enter End Date" className="form-control" onChange={this.experienceChangeHandler} />
                     </div>
                     <input type="checkbox" name="current_position" onChange={this.experienceChangeHandler} /><label>Current Position</label>
                     <div className="form-group">

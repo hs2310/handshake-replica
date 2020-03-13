@@ -9,11 +9,11 @@ class EventApplications extends React.Component {
             events: []
         }
     }
-    componentDidMount() {
+    async componentDidMount() {
         let data = {
             sid: localStorage.getItem("id")
         }
-        axios.post("http://localhost:3001/getAppliedEvents", data).then(res => {
+        await axios.post("http://localhost:3001/getAppliedEvents", data).then(res => {
             this.setState({
                 events: res.data
             })
@@ -38,10 +38,10 @@ class EventApplications extends React.Component {
             <nav className="navbar navbar-expand-sm bg-light navbar-light">
                 <ul className="navbar-nav">
                     <li className="nav-item active">
-                        <Link className="nav-link" to="/events">Post an Event</Link>
+                        <Link className="nav-link" to="/events">View Events</Link>
                     </li>
                     <li className="nav-item active">
-                        <Link className="nav-link" to="/EventApplication">Applicants</Link>
+                        <Link className="nav-link" to="/EventApplication">Applications</Link>
                     </li>
                 </ul>
             </nav>

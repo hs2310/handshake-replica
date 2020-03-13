@@ -7,7 +7,9 @@ var cookieParser = require('cookie-parser');
 var cors = require('cors');
 const multer = require('multer');
 var path = require('path');
+var bcrypt = require('bcrypt');
 // app.use(bodyParser.urlencoded({extended: true}))
+var salt = bcrypt.genSaltSync(10)
 app.set('view engine', 'ejs');
 
 //use cors to allow cross origin resource sharing
@@ -69,12 +71,13 @@ app.post('/student-signup', function (req, res) {
     var email = req.body.email;
     var college = req.body.college;
 
-    connection.query('SELECT * FROM `students` WHERE email = ? AND password = ?', [email, password], function (error, results, fields) {
+    connection.query('SELECT * FROM `students` WHERE email = ?', [email], function (error, results, fields) {
         if (results.length > 0) {
             res.send("User Already Exists !!");
         }
         else {
-            connection.query('INSERT INTO students (name, email, password, college) VALUES (?,?,?,?)', [name, email, password, college], (error, results) => {
+            var hash = bcrypt.hashSync(password, salt);
+            connection.query('INSERT INTO students (name, email, password, college) VALUES (?,?,?,?)', [name, email, hash, college], (error, results) => {
                 if (error) return res.json({ error: error });
                 else {
                     res.send("Inserted");
@@ -97,7 +100,8 @@ app.post('/company-signup', function (req, res) {
             res.send("User Already Exists !!");
         }
         else {
-            connection.query('INSERT INTO `company` (name, email, password, location) VALUES (?,?,?,?)', [name, email, password, location], (error, results) => {
+            var hash = bcrypt.hashSync(password, salt);
+            connection.query('INSERT INTO `company` (name, email, password, location) VALUES (?,?,?,?)', [name, email, hash, location], (error, results) => {
                 if (error) return res.json({ error: error });
                 else {
                     res.send("Inserted");
@@ -116,10 +120,12 @@ app.post('/login', function (req, res) {
         table = "students";
     else
         table = "company";
-    connection.query('SELECT * FROM `' + table + '` WHERE email = ? AND password = ?', [req.body.email, req.body.password], (error, results, fields) => {
+    connection.query('SELECT * FROM `' + table + '` WHERE email = ? ', [req.body.email], (error, results, fields) => {
         console.log(results);
         if (results.length > 0) {
             // if (user.username === req.body.username && user.password === req.body.password) {
+            // var hash = bcrypt.hashSync(req.body.password, salt);
+            if(bcrypt.compareSync(req.body.password, results[0].password)){
             res.cookie('cookie', req.session.id, { maxAge: 900000, httpOnly: false, path: '/' });
             let id = null;
             if (table === "students") {
@@ -143,6 +149,11 @@ app.post('/login', function (req, res) {
             // res.setHeader({'Content-Type': 'text/plain'})
             // res.end(results[0].sid);
         }
+        else {
+            res.statusCode = 401;
+            res.end("Error");
+        }
+    }
         else {
             res.statusCode = 401;
             res.end("Error");
@@ -932,7 +943,26 @@ app.post("/getAppliedEvents", (req, res) => {
     })
 })
 app.post("/getEventStudents", (req, res) => {
-    req.send("uploaded")
+    async function updateInfo() {
+        const mysql = require('mysql2/promise');
+        const conn = await mysql.createConnection({ host: 'localhost', user: 'root', database: 'handshake' });
+        const [rows, fields] = await conn.query('SELECT `students`.* FROM `students` INNER JOIN `event_applied` ON (`students`.`sid` = `event_applied`.`sid` AND `event_applied`.`eid` = ? );', [Number(req.body.eid)]);
+
+        await conn.end();
+        // return Object.assign({}, rows);
+        // if (error) {
+        //     return error
+        // }
+        // else {
+        // console.log(results)
+        return rows;
+        // }
+    }
+    data = updateInfo()
+    data.then((r) => {
+        res.send(r);
+        // console.log(r);
+    })
 })
 // app.post('/company-profile_pic ', upload.single('file') , (req,res) =>{
 //     // console.log(req.file)

@@ -37,9 +37,11 @@ class CEvents extends React.Component {
     }
     display(i) {
         console.log(i)
+        window.alert("hi")
         this.setState({
             displayJobs: { ...this.state.posted_events[i] }
         })
+        
     }
     toggle() {
         if (this.state.toggle_post === true)
@@ -112,13 +114,20 @@ class CEvents extends React.Component {
                                     <input type="time" name="time" onChange={this.changeHandler} placeholder="Time" className="form-control" />
                                 </div>
                                 <div className="form-group">
-                                    <input type="date" name="date" onChange={this.changeHandler} placeholder="Date" className="form-control" />
+                                    <input type="text" name="date" onChange={this.changeHandler} placeholder="Date" className="form-control" />
                                 </div>
                                 <div className="form-group">
                                     <input type="text" name="location" onChange={this.changeHandler} placeholder="Location" className="form-control" />
                                 </div>
                                 <div className="form-group">
-                                    <input type="text" name="eligibility" onChange={this.changeHandler} placeholder="Eligibility" className="form-control" />
+                                    {/* <input type="text" name="eligibility" onChange={this.changeHandler} placeholder="Eligibility" className="form-control" /> */}
+                                    <select className="form-control" name="eligibility" onChange={this.changeHandler}>
+                                        <option></option>
+                                        <option value="All Majors">All Majors</option>
+                                        <option value="MS Software Engineering">MS Software Engineering</option>
+                                        <option value="MS Electrical Engineering">MS Electrical Engineering</option>
+                                        <option value="MS Computer Sciennce">MS Computer Sciennce</option>
+                                    </select>
                                 </div>
                                 <button className="btn btn-primary">Post an Event</button>
                             </form>
@@ -159,8 +168,8 @@ class CEvents extends React.Component {
                                 <h6 className="card-subtitle mb-2 text-muted">{displayJobs.description}</h6>
                                 <p className="card-text">{displayJobs.time}</p>
                                 <p className="card-text">{displayJobs.date}</p>
-                                <p className="card-text">{displayJobs.location}</p>
-                                <p className="card-text">{displayJobs.eligibility}</p>
+                                <p className="card-text">Location : {displayJobs.location}</p>
+                                <p className="card-text">Eligibility : {displayJobs.eligibility}</p>
                             </div>
                         </div>
                     </div>

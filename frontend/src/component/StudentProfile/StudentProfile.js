@@ -62,17 +62,20 @@ class StudentProfile extends React.Component {
         console.log(this.state.data)
     }
     render() {
+        let style_box = { boxShadow: "1px 3px 5px grey", padding: "2%" };
         return <div>
             <Navigate />
             <div className="container" style={{ marginTop: "5%" }}>
                 <div className="row">
-                    <div className="col-md-4">
+                    <div className="col-md-4" style={style_box}>
+                    
                         <h4>General Information</h4>
+                        <img src={this.state.data.profile_pic} alt="Not Uploaded!!!" className="rounded-circle" height="100px" width="100px" style={{float : "left"}}/> 
                         <h5>{this.state.data.name}</h5>
-                        {this.state.data.profile_pic}
+                        
                         <h6>{this.state.data.college}</h6>
                     </div>
-                    <div className="col-md-8">
+                    <div className="col-md-8" style={style_box}>
                         <h4>
                             My Journey
                         </h4>
@@ -80,12 +83,12 @@ class StudentProfile extends React.Component {
                     </div>
                 </div>
                 <div className="row">
-                    <div className="col-md-4">
+                    <div className="col-md-4" style={style_box}>
                         <h4>Contact Info</h4>
-                        <h6>{this.state.data.email}</h6>
-                        <h6>{this.state.data.mob}</h6>
+                        <h6>Email :{this.state.data.email}</h6>
+                        <h6>Mob : {this.state.data.mob}</h6>
                     </div>
-                    <div className="col-md-8">
+                    <div className="col-md-8" style={style_box}>
                         <h4>
                             Education
                         </h4>
@@ -107,11 +110,11 @@ class StudentProfile extends React.Component {
                     </div>
                 </div>
                 <div className="row">
-                    <div className="col-md-4">
+                    <div className="col-md-4" style={style_box}>
                         <h4>Skills</h4>
                         <div>{this.state.skill.map(item => <div key={item.id}>{item.name}</div>)}</div>
                     </div>
-                    <div className="col-md-8">
+                    <div className="col-md-8" style={style_box}>
                         <h4>
                             Work Experience
                         </h4>
@@ -132,8 +135,8 @@ class StudentProfile extends React.Component {
                     </div>
                 </div>
             </div>
-            {this.props.match.params.id}
-            <br />
+            {/* {this.props.match.params.id}
+            <br /> */}
             {/* {this.state.name}<br/>
             {this.state.description}<br/>
             {this.state.email}<br/>
