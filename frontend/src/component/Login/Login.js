@@ -99,9 +99,6 @@ class Login extends Component {
         //     });
         // });
     }
-    componentWillUnmount(){
-
-    }
     render() {
         
         let redirectVar = null;
