@@ -179,8 +179,6 @@ class JobSearch extends React.Component {
     }
     var gtJobs = null
 
-    console.log("inside else in student jobs", this.state.filteredJobs)
-
     if (this.state.filteredJobs.length === 0) {
       gtJobs = "No Jobs Available"
     }
