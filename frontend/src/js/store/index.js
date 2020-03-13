@@ -6,7 +6,7 @@ import { createStore,applyMiddleware,compose, combineReducers } from 'redux';
 import thunk from 'redux-thunk';
 import {AuthMiddleware} from "../middleware/index";
 import {ProfileMiddleware} from "../middleware/profileMiddleware"
-import {jobsMiddleware} from "../middleware/jobsMiddleware"
+// import {jobsMiddleware} from "../middleware/jobsMiddleware"
 // import rootReducer from './reducers';
  
 // Note: this API requires redux@>=3.1.0
@@ -36,10 +36,10 @@ import {jobsMiddleware} from "../middleware/jobsMiddleware"
     //   rootReducer,
       
     // );
-    const reducer = combineReducers({rootReducer: rootReducer, profileReducer: profileReducer, jobReducer: jobReducer})
+    const reducer = combineReducers({rootReducer: rootReducer, profileReducer: profileReducer})
     const store = createStore(
       reducer,
-      storeEnhancers(applyMiddleware(AuthMiddleware,ProfileMiddleware,jobsMiddleware))
+      storeEnhancers(applyMiddleware(AuthMiddleware,ProfileMiddleware))
     );
     // window.store = store
 

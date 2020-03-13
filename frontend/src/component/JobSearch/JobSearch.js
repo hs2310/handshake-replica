@@ -30,13 +30,15 @@ class JobSearch extends React.Component {
     this.jobSearch = this.jobSearch.bind(this)
   }
   async componentDidMount() {
-    await this.props.getJobs();
-    console.log("JOBS " + this.props.jobs);
+    // await this.props.getJobs();
+    await axios.get("http://54.86.64.9:3001/getJobs").then(res =>{  
+    // console.log("JOBS " + this.props.jobs);
     this.setState({
-      filteredJobs : this.props.jobs,
-      jobs : this.props.jobs,
+      filteredJobs : res.data,
+      jobs : res.data,
       displayJobs: { ...this.state.jobs[0] }
     })
+  })
   }
   filterClear = () => {
     this.setState({
@@ -270,17 +272,17 @@ class JobSearch extends React.Component {
     </div >
   }
 }
-const mapStateToProps = state => {
-  return {
-    id: state.rootReducer.id,
-    jobs: state.jobReducer.jobs
-  };
-};
+// const mapStateToProps = state => {
+//   return {
+//     id: state.rootReducer.id,
+//     jobs: state.jobReducer.jobs
+//   };
+// };
 
-const mapDispatchToProps = dispatch => {
-  return {
-    getJobs: rootReducer => dispatch(getJobs(rootReducer))
-  };
-}
-export default connect(mapStateToProps, mapDispatchToProps)(JobSearch);
-// export default JobSearch;
+// const mapDispatchToProps = dispatch => {
+//   return {
+//     getJobs: rootReducer => dispatch(getJobs(rootReducer))
+//   };
+// }
+// export default connect(mapStateToProps, mapDispatchToProps)(JobSearch);
+export default JobSearch;
