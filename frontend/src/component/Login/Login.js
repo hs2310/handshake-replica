@@ -73,7 +73,7 @@ class Login extends Component {
 
                     localStorage.setItem('id', response.data)
                     if (this.state.company) {
-                        localStorage.setItem('type', 'college');
+                        localStorage.setItem('type', 'company');
                     }
                     else {
                         localStorage.setItem('type', 'student');
