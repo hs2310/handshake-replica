@@ -77,11 +77,11 @@ class Profile extends React.Component {
   }
   
  
-  async componentDidMount() {
+  componentDidMount() {
      //update();
-     console.log("ID:"+JSON.stringify(store.getState()))
-     await this.props.getStudentData({id : this.props.id});
-     
+    //  console.log("ID:"+JSON.stringify(store.getState()))
+    //  await this.props.getStudentData({id : this.props.id});
+     this.update();
   }
   render() {
     let style_box = { boxShadow: "1px 3px 5px grey", padding: "2%" };
