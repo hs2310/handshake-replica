@@ -39,7 +39,7 @@ import {jobsMiddleware} from "../middleware/jobsMiddleware"
     const reducer = combineReducers({rootReducer: rootReducer, profileReducer: profileReducer, jobReducer: jobReducer})
     const store = createStore(
       reducer,
-      storeEnhancers(applyMiddleware(thunk,AuthMiddleware,ProfileMiddleware,jobsMiddleware))
+      storeEnhancers(applyMiddleware(AuthMiddleware,ProfileMiddleware,jobsMiddleware))
     );
     // window.store = store
 
