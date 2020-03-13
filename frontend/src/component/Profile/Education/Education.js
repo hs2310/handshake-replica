@@ -23,9 +23,10 @@ class Education extends React.Component {
         this.educationHandler = this.educationHandler.bind(this);
         this.educationChangeHandler = this.educationChangeHandler.bind(this);
         this.insertEdu = this.insertEdu.bind(this);
+        this.update = this.update.bind(this);
     }
     componentDidMount(){
-      this.update();
+      this.update()
     }
     update = () =>{
       let data = {sid : localStorage.getItem('id')}
