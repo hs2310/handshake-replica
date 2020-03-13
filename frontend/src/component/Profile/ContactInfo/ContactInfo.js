@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import {connect} from 'react-redux';
+// import {connect} from 'react-redux';
 class ContactInfo extends React.Component {
     constructor(props) {
         super(props);
@@ -15,7 +15,7 @@ class ContactInfo extends React.Component {
         this.updateInfo = this.updateInfo.bind(this);
     }
     async componentDidMount() {
-        let data = { sid: this.props.id, call: 'contact' }
+        let data = { sid: localStorage.getItem('id'), call: 'contact' }
         await axios.post("http://54.86.64.9:3001/studentData", data).then(res => {
             this.setState({
                 data: res.data[0],
@@ -46,7 +46,7 @@ class ContactInfo extends React.Component {
         
         e.preventDefault();
         let data = this.state;
-        data.sid = this.props.id;
+        data.sid = localStorage.getItem('id');
         console.log(this.state);
         axios.post("http://54.86.64.9:3001/UpdateContactInfo", data).then(res => console.log(res.data));
         
@@ -80,11 +80,11 @@ class ContactInfo extends React.Component {
         </div>
     }
 }
-const mapStateToProps = state => {
+// const mapStateToProps = state => {
 
-    return { 
-        id: state.rootReducer.id,
-        type: state.rootReducer.type
-    };
-  };
-  export default connect(mapStateToProps)(ContactInfo);
+//     return { 
+//         id: state.rootReducer.id,
+//         type: state.rootReducer.type
+//     };
+//   };
+  export default ContactInfo;

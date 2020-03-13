@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import {connect} from 'react-redux';
+// import {connect} from 'react-redux';
 class MyJourney extends React.Component {
     constructor(props) {
         super(props);
@@ -14,7 +14,7 @@ class MyJourney extends React.Component {
         this.updateInfo = this.updateInfo.bind(this);
     }
     async componentDidMount() {
-        let data = { sid: this.props.id , call : 'myJourney' }
+        let data = { sid: localStorage.getItem('id') , call : 'myJourney' }
         await axios.post("http://54.86.64.9:3001/studentData", data).then(res => {
             this.setState({
                 data: res.data[0],
@@ -75,11 +75,11 @@ class MyJourney extends React.Component {
         </div>
     }
 }
-const mapStateToProps = state => {
+// const mapStateToProps = state => {
 
-    return { 
-        id: state.rootReducer.id,
-        type: state.rootReducer.type
-    };
-  };
-  export default connect(mapStateToProps)(MyJourney);
+//     return { 
+//         id: state.rootReducer.id,
+//         type: state.rootReducer.type
+//     };
+//   };
+  export default MyJourney;

@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import {connect} from 'react-redux';
+// import {connect} from 'react-redux';
 class SkillSet extends React.Component {
     constructor(props) {
         super(props);
@@ -17,7 +17,7 @@ class SkillSet extends React.Component {
     }
     update = () => {
         
-        let data = { sid: this.props.id }
+        let data = { sid: localStorage.getItem('id') }
         axios.post("http://54.86.64.9:3001/studentSkills", data).then(res => {
             this.setState({
                 skillSet: res.data,
@@ -121,11 +121,11 @@ class SkillSet extends React.Component {
         </div>
     }
 }
-const mapStateToProps = state => {
+// const mapStateToProps = state => {
 
-    return { 
-        id: state.rootReducer.id,
-        type: state.rootReducer.type
-    };
-  };
-  export default connect(mapStateToProps)(SkillSet);
+//     return { 
+//         id: state.rootReducer.id,
+//         type: state.rootReducer.type
+//     };
+//   };
+  export default SkillSet;

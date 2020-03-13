@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import UpdateExperience from './updateExperience/updateExperience';
-import {connect} from 'react-redux';
+// import {connect} from 'react-redux';
 class Experience extends React.Component {
     constructor(props) {
         super(props);
@@ -25,7 +25,7 @@ class Experience extends React.Component {
     }
     update = () => {
         let data ={
-            sid : this.props.id
+            sid : localStorage.getItem('id')
         }
         axios.post("http://54.86.64.9:3001/studentExperience", data).then(res => {
     // this.state.experience.push(res.data)  
@@ -117,11 +117,11 @@ class Experience extends React.Component {
         </div>
     }
 }
-const mapStateToProps = state => {
+// const mapStateToProps = state => {
 
-    return { 
-        id: state.rootReducer.id,
-        type: state.rootReducer.type
-    };
-  };
-  export default connect(mapStateToProps)(Experience);
+//     return { 
+//         id: state.rootReducer.id,
+//         type: state.rootReducer.type
+//     };
+//   };
+  export default Experience;

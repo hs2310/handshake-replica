@@ -1,6 +1,6 @@
 import React from 'react'
 import axios from 'axios';
-import  {connect} from 'react-redux';
+// import  {connect} from 'react-redux';
 class UpdateExperience extends React.Component {
     constructor(props) {
         super(props);
@@ -37,7 +37,7 @@ class UpdateExperience extends React.Component {
         e.preventDefault();
         let data = this.state;
         data.id = this.props.item.id;
-        data.sid = this.props.id;
+        data.sid = localStorage.getItem('id');
         // console.log(data);
         
         axios.put("http://54.86.64.9:3001/updateExperience", data).then(res => console.log(res.data)).catch(e => alert(e.message))
@@ -104,11 +104,11 @@ class UpdateExperience extends React.Component {
         </div>
     }
 }
-const mapStateToProps = state => {
+// const mapStateToProps = state => {
 
-    return { 
-        id: state.rootReducer.id,
-        type: state.rootReducer.type
-    };
-  };
-  export default connect(mapStateToProps)(UpdateExperience);
+//     return { 
+//         id: state.rootReducer.id,
+//         type: state.rootReducer.type
+//     };
+//   };
+  export default UpdateExperience;

@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import {connect} from 'react-redux';
+// import {connect} from 'react-redux';
 import ProfilePic from '../ProfilePic/ProfilePic';
 class GeneralInfo extends React.Component {
     constructor(props) {
@@ -18,7 +18,7 @@ class GeneralInfo extends React.Component {
         this.updateInfo = this.updateInfo.bind(this);
     }
     async componentDidMount (){
-      let data ={sid : this.props.id , call : "generalInfo"}
+      let data ={sid : localStorage.getItem('id') , call : "generalInfo"}
       await axios.post("http://54.86.64.9:3001/studentData", data).then(res => {
       this.setState({
         data: res.data[0],
@@ -97,11 +97,11 @@ class GeneralInfo extends React.Component {
         </div>
     }
 }
-const mapStateToProps = state => {
+// const mapStateToProps = state => {
 
-  return { 
-      id: state.rootReducer.id,
-      type: state.rootReducer.type
-  };
-};
-export default connect(mapStateToProps)(GeneralInfo);
+//   return { 
+//       id: state.rootReducer.id,
+//       type: state.rootReducer.type
+//   };
+// };
+export default GeneralInfo;

@@ -2,7 +2,7 @@ import React from 'react';
 // import cookie from 'react-cookies';
 // import { useParams } from 'react-router-dom';
 // import * as bs from 'react-bootstrap';
-import {connect} from 'react-redux';
+// import {connect} from 'react-redux';
 import axios from 'axios';
 import Navigate from '../Navigate/Navigate'
 // import { logout } from '../../js/actions/index';
@@ -79,11 +79,11 @@ class CompanyProfile extends React.Component {
         </div>   
     }
 }
-const mapStateToProps = state => {
-    return {
-        id: state.rootReducer.id,
-        jobs: state.jobReducer.jobs
-    };
-};
+// const mapStateToProps = state => {
+//     return {
+//         id: state.rootReducer.id,
+//         jobs: state.jobReducer.jobs
+//     };
+// };
 
-export default connect(mapStateToProps)(CompanyProfile);
+export default CompanyProfile;
