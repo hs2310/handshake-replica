@@ -103,8 +103,9 @@ class Login extends Component {
 
     }
     render() {
-        // if (this.props.authFlag) { return <Redirect to="/home" /> }
+        
         let redirectVar = null;
+        if (this.props.authFlag) { redirectVar = <Redirect to="/home" /> }
         let error = '';
         if (cookie.load("cookie")) {
              redirectVar = <Redirect to="/home" />
