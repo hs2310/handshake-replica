@@ -60,7 +60,7 @@ class SkillSet extends React.Component {
         e.preventDefault();
         this.setState({msg :''})
         let data = this.state;
-        data.sid = localStorage.setItem('id');
+        data.sid = localStorage.getItem('id');
         let flag = 0;
         this.state.skillSet.forEach(x => {
 
