@@ -44,7 +44,7 @@ class UpdateSchool extends React.Component {
         e.preventDefault();
         let data = this.state;
         data.id = this.props.item.id;
-        data.sid = '1';
+        data.sid = localStorage.getItem('id');
         // console.log(data);
 
         axios.post("http://54.86.64.9:3001/updateEducation", data).then(res => console.log(res.data)).catch(e => console.log(e.message))
