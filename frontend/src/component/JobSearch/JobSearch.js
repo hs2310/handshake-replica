@@ -61,7 +61,7 @@ class JobSearch extends React.Component {
       jid: jid,
       sid: localStorage.getItem('id')
     }
-    axios.post("http://localhost:3001/checkapplied", data).then(res => {
+    axios.post("http://54.86.64.9:3001/checkapplied", data).then(res => {
       this.setState({
         apply: res.data
       })
@@ -74,7 +74,7 @@ class JobSearch extends React.Component {
   //   let data = {
   //     filter: this.state.filter1
   //   }
-  //   axios.post("http://localhost:3001/jobfilter1", data).then(res => {
+  //   axios.post("http://54.86.64.9:3001/jobfilter1", data).then(res => {
   //     this.setState({
   //       jobs: res.data
   //     })

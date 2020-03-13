@@ -29,7 +29,7 @@ class Education extends React.Component {
     }
     update = () =>{
       let data = {sid : this.props.id}
-      axios.post("http://localhost:3001/studentEducation", data).then(res => {
+      axios.post("http://54.86.64.9:3001/studentEducation", data).then(res => {
       this.setState({
         education : res.data
       });
@@ -45,7 +45,7 @@ class Education extends React.Component {
         let { update, ...data } = this.state;
         data.sid = this.props.id;
 
-        axios.post("http://localhost:3001/insertEducation", data).then(res => alert(res.data));
+        axios.post("http://54.86.64.9:3001/insertEducation", data).then(res => alert(res.data));
         this.update();
         this.educationHandler();
     }
