@@ -34,9 +34,9 @@ class SkillSet extends React.Component {
 
         })
     }
-    componentDidMount() {
+    async componentDidMount() {
         //console.log("ID : " + this.props.id)
-        this.update()
+        await this.update()
     }
     skillHandler = () => {
         this.setState({msg :''}) 
