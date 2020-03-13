@@ -35,7 +35,7 @@ class SkillSet extends React.Component {
         })
     }
     componentDidMount() {
-        console.log("ID : " + this.props.id)
+        //console.log("ID : " + this.props.id)
         this.update()
     }
     skillHandler = () => {
@@ -60,7 +60,7 @@ class SkillSet extends React.Component {
         e.preventDefault();
         this.setState({msg :''})
         let data = this.state;
-        data.sid = this.props.id;
+        data.sid = localStorage.setItem('id');
         let flag = 0;
         this.state.skillSet.forEach(x => {
 

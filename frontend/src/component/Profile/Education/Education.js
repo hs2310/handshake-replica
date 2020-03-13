@@ -43,7 +43,7 @@ class Education extends React.Component {
     insertEdu = (e) => {
         e.preventDefault();
         let { update, ...data } = this.state;
-        data.sid = this.props.id;
+        data.sid = localStorage.getItem('id');
 
         axios.post("http://54.86.64.9:3001/insertEducation", data).then(res => alert(res.data));
         this.update();

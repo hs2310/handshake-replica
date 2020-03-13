@@ -50,7 +50,7 @@ class GeneralInfo extends React.Component {
     updateInfo = (e) => {
         e.preventDefault();
         let data = this.state;
-        data.sid = this.props.id;
+        data.sid = localStorage.getItem('id')
         console.log(this.state);
         axios.post("http://54.86.64.9:3001/UpdateInfo", data).then(res => alert(res.data));
         this.props.action();
