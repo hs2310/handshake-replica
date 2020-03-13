@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 // import {BrowserRouter} from 'react-router-dom';
 //import Register from './Register/Register';
 import axios from 'axios';
-import cookie from 'react-cookies';
+// import cookie from 'react-cookies';
 import { Redirect } from 'react-router';
 
 //Define a Login Component

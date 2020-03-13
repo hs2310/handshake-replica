@@ -1,5 +1,5 @@
 import React from 'react';
-import cookie from 'react-cookies';
+// import cookie from 'react-cookies';
 import { Redirect } from 'react-router';
 // import * as bs from 'react-bootstrap';
 // import {connect} from 'react-redux';
@@ -9,7 +9,7 @@ class Logout extends React.Component {
 //     super(props)
 //   }
     componentDidMount(){
-        cookie.remove("cookie",{path : '/'})
+        // cookie.remove("cookie",{path : '/'})
         localStorage.removeItem('id')
         // this.props.logout();
     }

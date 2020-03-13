@@ -1,6 +1,6 @@
 import React from 'react'
 // import axios from 'axios';
-import cookie from 'react-cookies';
+// import cookie from 'react-cookies';
 import { Redirect } from 'react-router';
 // import * as bs from 'react-bootstrap';
 // import {connect} from 'react-redux';

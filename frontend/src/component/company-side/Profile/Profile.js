@@ -2,7 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import Navigate from '../../Navigate/Navigate';
 import {Container , Row , Col} from 'react-bootstrap';
-import cookie from 'react-cookies';
+// import cookie from 'react-cookies';
 import {Redirect} from 'react-router';
 import CGeneralInfo from './CGeneralInfo/CGeneralInfo';
 import CContactInfo from './CContactInfo/CContactInfo';

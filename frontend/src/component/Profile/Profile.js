@@ -1,7 +1,7 @@
 import React from 'react'
 import axios from 'axios';
 import Navigate from "../Navigate/Navigate"
-import cookie from 'react-cookies';
+// import cookie from 'react-cookies';
 import { Redirect } from 'react-router';
 import { Container, Row, Col } from 'react-bootstrap';
 import Experience from './experience/experience';
@@ -11,7 +11,7 @@ import ContactInfo from './ContactInfo/ContactInfo'
 import MyJourney from './MyJourney/MyJourney';
 import SkillSet from './SkillSet/SkillSet';
 // import {connect} from 'react-redux';
-import store from '../../js/store/index';
+// import store from '../../js/store/index';
 // import {getStudentData} from '../../js/actions/profile-action'
 // import {rootReducer} from '../../js/reducers/index'
 // import {store} from '../../js/store/index'
