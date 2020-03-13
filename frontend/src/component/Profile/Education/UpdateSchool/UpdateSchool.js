@@ -19,6 +19,9 @@ class UpdateSchool extends React.Component {
 
         }
         this.educationChangeHandler = this.educationChangeHandler.bind(this);
+        this.updateEdu = this.updateEdu.bind(this);
+        this.deleteSchool = this.deleteSchool.bind(this);
+        this.editSchool = this.editSchool.bind(this);
     }
     editSchool = () => {
         if (this.state.update === true)
@@ -55,7 +58,6 @@ class UpdateSchool extends React.Component {
         data.id = this.props.item.id;
 
         axios.post("http://54.86.64.9:3001/deleteEducation", data).then(res => console.log(res.data)).catch(e => console.log(e.message))
-
         this.props.action();
         this.editSchool();
     }
