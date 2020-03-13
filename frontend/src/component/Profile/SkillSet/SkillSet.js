@@ -9,7 +9,7 @@ class SkillSet extends React.Component {
             skillSet: [],
             skill: [],
             selectSkill: '',
-            msg:''
+            msg: ''
         }
         this.skillHandler = this.skillHandler.bind(this);
         this.educationChangeHandler = this.educationChangeHandler.bind(this);
@@ -17,7 +17,7 @@ class SkillSet extends React.Component {
         this.update = this.update.bind(this);
     }
     update = () => {
-        
+
         let data = { sid: localStorage.getItem('id') }
         axios.post("http://54.86.64.9:3001/studentSkills", data).then(res => {
             this.setState({
@@ -35,12 +35,12 @@ class SkillSet extends React.Component {
 
         })
     }
-    async componentDidMount() {
+    componentDidMount() {
         //console.log("ID : " + this.props.id)
-        await this.update()
+        this.update()
     }
     skillHandler = () => {
-        this.setState({msg :''}) 
+        this.setState({ msg: '' })
         if (this.state.update_skill === true)
             this.setState({
                 update_skill: false
@@ -59,7 +59,7 @@ class SkillSet extends React.Component {
     updateInfo = (e) => {
 
         e.preventDefault();
-        this.setState({msg :''})
+        this.setState({ msg: '' })
         let data = this.state;
         data.sid = localStorage.getItem('id');
         let flag = 0;
@@ -69,13 +69,19 @@ class SkillSet extends React.Component {
                 flag = 1;
             }
         })
-        
+
         if (flag === 1)
-            this.setState({msg :<div className="alert alert-danger">"Skill already exists"</div>})
+            this.setState({ msg: <div className="alert alert-danger">"Skill already exists"</div> })
         else {
             console.log(this.state);
             axios.post("http://54.86.64.9:3001/UpdateSkill", data).then(res => {
-                console.log(res.data)
+                // console.log(res.data)
+                axios.post("http://54.86.64.9:3001/studentSkills", data).then(res => {
+                    this.setState({
+                        skillSet: res.data,
+                    });
+                    // console.log(this.state.skillSet)
+                })
             });
             this.update();
             // this.props.action();
@@ -84,14 +90,21 @@ class SkillSet extends React.Component {
     }
     deleteSkill = (id) => {
         let data = { "id": id }
-        axios.post("http://54.86.64.9:3001/DeleteSkill", data).then(res => console.log(res.data));
+        axios.post("http://54.86.64.9:3001/DeleteSkill", data).then(res => {
+            axios.post("http://54.86.64.9:3001/studentSkills", data).then(res => {
+                    this.setState({
+                        skillSet: res.data,
+                    });
+                    // console.log(this.state.skillSet)
+                })
+        });
         this.update();
         // this.props.action();
         this.skillHandler();
     }
-    render() { 
+    render() {
         let skill = null;
-        
+
         if (this.state.update_skill === true) {
             skill = <div>
                 <div>{this.state.skillSet.map(item => <div key={item.id}>{item.name}<button type="button" onClick={() => { this.deleteSkill(item.id) }}>X</button></div>)}</div>
@@ -129,4 +142,4 @@ class SkillSet extends React.Component {
 //         type: state.rootReducer.type
 //     };
 //   };
-  export default SkillSet;
+export default SkillSet;
