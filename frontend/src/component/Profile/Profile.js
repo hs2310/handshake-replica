@@ -12,7 +12,7 @@ import MyJourney from './MyJourney/MyJourney';
 import SkillSet from './SkillSet/SkillSet';
 // import {connect} from 'react-redux';
 import store from '../../js/store/index';
-import {getStudentData} from '../../js/actions/profile-action'
+// import {getStudentData} from '../../js/actions/profile-action'
 // import {rootReducer} from '../../js/reducers/index'
 // import {store} from '../../js/store/index'
 class Profile extends React.Component {
