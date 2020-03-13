@@ -14,6 +14,7 @@ class SkillSet extends React.Component {
         this.skillHandler = this.skillHandler.bind(this);
         this.educationChangeHandler = this.educationChangeHandler.bind(this);
         this.updateInfo = this.updateInfo.bind(this);
+        this.update = this.update.bind(this);
     }
     update = () => {
         
