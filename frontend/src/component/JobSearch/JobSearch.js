@@ -4,8 +4,8 @@ import React from 'react'
 // import { Redirect } from 'react-router';
 import { Link } from 'react-router-dom';
 // import Navigate from '../Navigate/Navigate';
-import { getJobs } from '../../js/actions/job-action';
-import { connect } from 'react-redux';
+// import { getJobs } from '../../js/actions/job-action';
+// import { connect } from 'react-redux';
 import ApplicationForm from './ApplicationForm';
 import Jobs from '../Jobs/Jobs';
 import axios from 'axios';
@@ -16,7 +16,7 @@ class JobSearch extends React.Component {
       msg: false,
       displayJobs: {},
       apply: '',
-      jobs: this.props.jobs,
+      jobs: [],
       filteredJobs: [],
       appliedFilters: [],
       fullTimeStatus: false,
@@ -36,6 +36,9 @@ class JobSearch extends React.Component {
     this.setState({
       filteredJobs : res.data,
       jobs : res.data,
+      
+    })
+    this.setState({
       displayJobs: { ...this.state.jobs[0] }
     })
   })
