@@ -103,7 +103,7 @@ class Login extends Component {
 
     }
     render() {
-        if (this.props.authFlag) { return <Redirect to="/home" /> }
+        // if (this.props.authFlag) { return <Redirect to="/home" /> }
         let redirectVar = null;
         let error = '';
         if (cookie.load("cookie")) {
