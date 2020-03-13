@@ -107,9 +107,9 @@ class Login extends Component {
         let redirectVar = null;
         if (this.props.authFlag) { redirectVar = <Redirect to="/home" /> }
         let error = '';
-        if (cookie.load("cookie")) {
-             redirectVar = <Redirect to="/home" />
-        }
+        // if (cookie.load("cookie")) {
+        //      redirectVar = <Redirect to="/home" />
+        // }
         if ( this.props.error === '')
             error ='';
         else {
