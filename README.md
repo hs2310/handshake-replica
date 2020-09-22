@@ -2,7 +2,7 @@
 
 Handshake is a job hunt site for college students : https://www.joinhandshake.com/
 
-- technologies used : 
+- Technologies used : 
   - MongoDB
   - React.js
   - Node.js
